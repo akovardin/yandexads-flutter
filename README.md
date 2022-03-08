@@ -67,6 +67,7 @@ flutter pub run pigeon \
   --java_out ./android/src/main/kotlin/ru/kovardin/flutter_yandex_ads/pigeons/Interstitial.java \
   --java_package "ru.kovardin.flutter_yandex_ads.pigeons"
 
+
 flutter pub run pigeon \
   --input pigeons/rewarded.dart \
   --dart_out lib/pigeons/rewarded.dart \

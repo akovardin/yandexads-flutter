@@ -15,27 +15,27 @@ class YandexAdsBannerWidget extends StatelessWidget {
     required this.ads,
   }) : super(key: key) {
     if (onAdLoaded != null) {
-      ads.setOnAdLoaded(id, onAdLoaded);
+      ads.setOnAdLoaded(id, EventTypes.BANNER, onAdLoaded);
     }
 
     if (onAdFailedToLoad != null) {
-      ads.setOnAdFailedToLoad(id, onAdFailedToLoad);
+      ads.setOnAdFailedToLoad(id, EventTypes.BANNER, onAdFailedToLoad);
     }
 
     if (onImpression != null) {
-      ads.setOnImpression(id, onImpression);
+      ads.setOnImpression(id, EventTypes.BANNER, onImpression);
     }
 
     if (onAdClicked != null) {
-      ads.setOnAdCLicked(id, onAdClicked);
+      ads.setOnAdCLicked(id, EventTypes.BANNER, onAdClicked);
     }
 
     if (onLeftApplication != null) {
-      ads.setOnLeftApplication(id, onLeftApplication);
+      ads.setOnLeftApplication(id, EventTypes.BANNER, onLeftApplication);
     }
 
     if (onReturnedToApplication != null) {
-      ads.setOnReturnedToApplication(id, onReturnedToApplication);
+      ads.setOnReturnedToApplication(id, EventTypes.BANNER, onReturnedToApplication);
     }
   }
 

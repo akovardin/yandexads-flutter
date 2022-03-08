@@ -4,6 +4,7 @@ import 'package:pigeon/pigeon.dart';
 class EventRequest {
   late String name;
   late String id;
+  late String type;
 }
 
 class EventResponse {

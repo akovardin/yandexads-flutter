@@ -42,6 +42,15 @@ public class Yandex {
       this.id = setterArg;
     }
 
+    private @NonNull String type;
+    public @NonNull String getType() { return type; }
+    public void setType(@NonNull String setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"type\" is null.");
+      }
+      this.type = setterArg;
+    }
+
     /** Constructor is private to enforce null safety; use Builder. */
     private EventRequest() {}
     public static class Builder {
@@ -55,10 +64,16 @@ public class Yandex {
         this.id = setterArg;
         return this;
       }
+      private @Nullable String type;
+      public @NonNull Builder setType(@NonNull String setterArg) {
+        this.type = setterArg;
+        return this;
+      }
       public @NonNull EventRequest build() {
         EventRequest pigeonReturn = new EventRequest();
         pigeonReturn.setName(name);
         pigeonReturn.setId(id);
+        pigeonReturn.setType(type);
         return pigeonReturn;
       }
     }
@@ -66,6 +81,7 @@ public class Yandex {
       Map<String, Object> toMapResult = new HashMap<>();
       toMapResult.put("name", name);
       toMapResult.put("id", id);
+      toMapResult.put("type", type);
       return toMapResult;
     }
     static @NonNull EventRequest fromMap(@NonNull Map<String, Object> map) {
@@ -74,6 +90,8 @@ public class Yandex {
       pigeonResult.setName((String)name);
       Object id = map.get("id");
       pigeonResult.setId((String)id);
+      Object type = map.get("type");
+      pigeonResult.setType((String)type);
       return pigeonResult;
     }
   }

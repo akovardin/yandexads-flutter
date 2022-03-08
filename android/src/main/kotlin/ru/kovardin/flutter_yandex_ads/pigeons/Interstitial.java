@@ -28,7 +28,9 @@ public class Interstitial {
 
   /** Generated interface from Pigeon that represents a handler of messages from Flutter.*/
   public interface YandexAdsInterstitial {
+    @NonNull void config(String id);
     @NonNull void load();
+    @NonNull void show();
 
     /** The codec used by YandexAdsInterstitial. */
     static MessageCodec<Object> getCodec() {
@@ -39,12 +41,55 @@ public class Interstitial {
     static void setup(BinaryMessenger binaryMessenger, YandexAdsInterstitial api) {
       {
         BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.YandexAdsInterstitial.config", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              ArrayList<Object> args = (ArrayList<Object>)message;
+              String idArg = (String)args.get(0);
+              if (idArg == null) {
+                throw new NullPointerException("idArg unexpectedly null.");
+              }
+              api.config(idArg);
+              wrapped.put("result", null);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+            }
+            reply.reply(wrapped);
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
             new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.YandexAdsInterstitial.load", getCodec());
         if (api != null) {
           channel.setMessageHandler((message, reply) -> {
             Map<String, Object> wrapped = new HashMap<>();
             try {
               api.load();
+              wrapped.put("result", null);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+            }
+            reply.reply(wrapped);
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.YandexAdsInterstitial.show", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              api.show();
               wrapped.put("result", null);
             }
             catch (Error | RuntimeException exception) {

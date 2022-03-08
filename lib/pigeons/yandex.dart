@@ -12,15 +12,18 @@ class EventRequest {
   EventRequest({
     required this.name,
     required this.id,
+    required this.type,
   });
 
   String name;
   String id;
+  String type;
 
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
     pigeonMap['name'] = name;
     pigeonMap['id'] = id;
+    pigeonMap['type'] = type;
     return pigeonMap;
   }
 
@@ -29,6 +32,7 @@ class EventRequest {
     return EventRequest(
       name: pigeonMap['name']! as String,
       id: pigeonMap['id']! as String,
+      type: pigeonMap['type']! as String,
     );
   }
 }

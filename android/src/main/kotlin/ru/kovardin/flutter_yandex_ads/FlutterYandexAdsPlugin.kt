@@ -36,7 +36,7 @@ class FlutterYandexAdsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
     Yandex.YandexAdsApi.setup(binding.binaryMessenger, api)
 
     // components
-    Interstitial.YandexAdsInterstitial.setup(binding.binaryMessenger, YandexAdsInterstitial())
+    Interstitial.YandexAdsInterstitial.setup(binding.binaryMessenger, YandexAdsInterstitial(api, context))
     Rewarded.YandexAdsRewarded.setup(binding.binaryMessenger, YandexAdsRewarded())
 
     // widgets

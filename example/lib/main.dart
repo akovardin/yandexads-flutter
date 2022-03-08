@@ -1,63 +1,151 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_yandex_ads/compoenets/interstitial.dart';
 import 'dart:async';
 
 import 'package:flutter_yandex_ads/widgets/banner.dart';
 import 'package:flutter_yandex_ads/yandex.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const App());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+class App extends StatefulWidget {
+  const App({Key? key}) : super(key: key);
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<App> createState() => _AppState();
 }
 
-class _MyAppState extends State<MyApp> {
-  FlutterYandexAds ads = new FlutterYandexAds();
+class _AppState extends State<App> {
+  FlutterYandexAds ads = FlutterYandexAds();
 
   @override
   void initState() {
     super.initState();
+
     ads.initialize();
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Yandex ADS'),
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Banner'),
-            Container(
-              height: 100,
-              child: YandexAdsBannerWidget(
-                ads: ads,
-                // id: 'R-M-1582183-1',
-                id: 'R-M-DEMO-320x50',
-                onAdLoaded: () {
-                  print('onAdLoaded');
-                },
-                onAdFailedToLoad: (AdLoadError err) {
-                  print('onAdFailedToLoad code: ${err.code}, description: ${err.description}');
-                },
-                onImpression: (String? data) {
-                  print("on ad impression ${data ?? ''}");
-                },
-                onAdClicked: () {
-                  print('onAdClicked');
-                },
-              ),
-            ),
-          ],
+      home: DefaultTabController(
+        length: 4,
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Yandex ADS'),
+          ),
+          bottomNavigationBar: const TabBar(
+            tabs: [
+              Tab(child: Text('Banner', style: TextStyle(color: Colors.black54))),
+              Tab(child: Text('Interstitial', style: TextStyle(color: Colors.black54))),
+              Tab(child: Text('Native', style: TextStyle(color: Colors.black54))),
+              Tab(child: Text('Rewarded', style: TextStyle(color: Colors.black54))),
+            ],
+          ),
+          body: TabBarView(
+            children: [
+              BannerScreen(ads: ads),
+              InterstitialScreen(ads: ads),
+              Icon(Icons.directions_bike),
+              Icon(Icons.directions_bike),
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+class BannerScreen extends StatefulWidget {
+  BannerScreen({Key? key, required this.ads}) : super(key: key);
+
+  FlutterYandexAds ads;
+
+  @override
+  _BannerScreenState createState() => _BannerScreenState();
+}
+
+class _BannerScreenState extends State<BannerScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text('Banner'),
+        Container(
+          height: 100,
+          child: YandexAdsBannerWidget(
+            ads: widget.ads,
+            // id: 'R-M-1582183-1',
+            id: 'R-M-DEMO-320x50',
+            onAdLoaded: () {
+              print('banner onAdLoaded');
+            },
+            onAdFailedToLoad: (AdLoadError err) {
+              print('banner onAdFailedToLoad code: ${err.code}, description: ${err.description}');
+            },
+            onImpression: (String? data) {
+              print("banner onImpression ${data ?? ''}");
+            },
+            onAdClicked: () {
+              print('banner onAdClicked');
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class InterstitialScreen extends StatefulWidget {
+  InterstitialScreen({Key? key, required this.ads}) : super(key: key);
+
+  FlutterYandexAds ads;
+
+  @override
+  _InterstitialScreenState createState() => _InterstitialScreenState();
+}
+
+class _InterstitialScreenState extends State<InterstitialScreen> {
+  late YandexAdsIntersttialComponents interstitial;
+
+  @override
+  void initState() {
+    super.initState();
+
+    interstitial = YandexAdsIntersttialComponents(
+        id: 'R-M-DEMO-320x480',
+        ads: widget.ads,
+        onAdLoaded: () {
+          print('interstitial onAdLoaded');
+        },
+        onAdFailedToLoad: (AdLoadError err) {
+          print('interstitial onAdFailedToLoad code: ${err.code}, description: ${err.description}');
+        }
+    );
+
+    interstitial.load();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text('Interstitial'),
+        ElevatedButton(
+          onPressed: () {
+            interstitial.show();
+          },
+          child: Text('show'),
+        ),
+      ],
     );
   }
 }
