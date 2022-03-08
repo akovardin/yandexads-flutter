@@ -6,11 +6,41 @@ import com.yandex.mobile.ads.common.InitializationListener
 import com.yandex.mobile.ads.common.MobileAds
 import ru.kovardin.flutter_yandex_ads.pigeons.Yandex
 
-// https://stackoverflow.com/questions/60048704/how-to-get-activity-and-context-in-flutter-plugin
 class YandexApi(private val context: Context): Yandex.YandexAdsApi {
+
+    var callbacks = mutableMapOf<Event, Yandex.Result<Yandex.EventResponse>>()
+
     override fun initialize() {
+        MobileAds.enableDebugErrorIndicator(true);
+        MobileAds.enableLogging(true);
         MobileAds.initialize(context, InitializationListener {
             Log.d("initialize", "initialize");
         })
+    }
+
+    // dispatchers
+
+    override fun onAdLoaded(request: Yandex.EventRequest?, result: Yandex.Result<Yandex.EventResponse>?) {
+        callbacks.put(Event(id = request?.id ?: "", name = request?.name ?: ""), result!!)
+    }
+
+    override fun onAdFailedToLoad(request: Yandex.EventRequest?, result: Yandex.Result<Yandex.EventResponse>?) {
+        callbacks.put(Event(id = request?.id ?: "", name = request?.name ?: ""), result!!)
+    }
+
+    override fun onImpression(request: Yandex.EventRequest?, result: Yandex.Result<Yandex.EventResponse>?) {
+        callbacks.put(Event(id = request?.id ?: "", name = request?.name ?: ""), result!!)
+    }
+
+    override fun onAdClicked(request: Yandex.EventRequest?, result: Yandex.Result<Yandex.EventResponse>?) {
+        callbacks.put(Event(id = request?.id ?: "", name = request?.name ?: ""), result!!)
+    }
+
+    override fun onLeftApplication(request: Yandex.EventRequest?, result: Yandex.Result<Yandex.EventResponse>?) {
+        callbacks.put(Event(id = request?.id ?: "", name = request?.name ?: ""), result!!)
+    }
+
+    override fun onReturnedToApplication(request: Yandex.EventRequest?, result: Yandex.Result<Yandex.EventResponse>?) {
+        callbacks.put(Event(id = request?.id ?: "", name = request?.name ?: ""), result!!)
     }
 }

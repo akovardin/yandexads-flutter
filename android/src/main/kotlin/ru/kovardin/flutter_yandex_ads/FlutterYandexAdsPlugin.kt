@@ -11,7 +11,11 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
-import ru.kovardin.flutter_yandex_ads.banner.YandexAdsBanner
+import ru.kovardin.flutter_yandex_ads.components.YandexAdsInterstitial
+import ru.kovardin.flutter_yandex_ads.components.YandexAdsRewarded
+import ru.kovardin.flutter_yandex_ads.pigeons.Interstitial
+import ru.kovardin.flutter_yandex_ads.pigeons.Rewarded
+import ru.kovardin.flutter_yandex_ads.views.YandexAdsBanner
 import ru.kovardin.flutter_yandex_ads.pigeons.Yandex
 
 /** FlutterYandexAdsPlugin */
@@ -28,20 +32,18 @@ class FlutterYandexAdsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
   override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
     context = binding.applicationContext
 
-    Yandex.YandexAdsApi.setup(binding.binaryMessenger, YandexApi(context))
+    val api = YandexApi(context)
+    Yandex.YandexAdsApi.setup(binding.binaryMessenger, api)
 
-    binding.platformViewRegistry.registerViewFactory("yandex-ads-banner", YandexAdsBanner());
+    // components
+    Interstitial.YandexAdsInterstitial.setup(binding.binaryMessenger, YandexAdsInterstitial())
+    Rewarded.YandexAdsRewarded.setup(binding.binaryMessenger, YandexAdsRewarded())
 
-//    channel = MethodChannel(binding.binaryMessenger, "flutter_yandex_ads")
-//    channel.setMethodCallHandler(this)
+    // widgets
+    binding.platformViewRegistry.registerViewFactory("yandex-ads-banner", YandexAdsBanner(api));
   }
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-//    if (call.method == "getPlatformVersion") {
-//      result.success("Android ${android.os.Build.VERSION.RELEASE}")
-//    } else {
-//      result.notImplemented()
-//    }
   }
 
   override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {

@@ -1,0 +1,96 @@
+package ru.kovardin.flutter_yandex_ads.views
+
+import android.content.Context
+import android.util.Log
+import android.view.View
+import com.yandex.mobile.ads.banner.AdSize
+import com.yandex.mobile.ads.banner.BannerAdEventListener
+import com.yandex.mobile.ads.banner.BannerAdView
+import com.yandex.mobile.ads.common.AdRequest
+import com.yandex.mobile.ads.common.AdRequestError
+import com.yandex.mobile.ads.common.ImpressionData
+import io.flutter.plugin.common.StandardMessageCodec
+import io.flutter.plugin.platform.PlatformView
+import io.flutter.plugin.platform.PlatformViewFactory
+import ru.kovardin.flutter_yandex_ads.Event
+import ru.kovardin.flutter_yandex_ads.YandexApi
+import ru.kovardin.flutter_yandex_ads.pigeons.Yandex
+
+class YandexAdsBanner(private val api: YandexApi) : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
+
+    override fun create(context: Context, viewId: Int, args: Any?): PlatformView {
+        val params = args as Map<String?, Any?>?
+
+
+        val id: String = params?.get("id") as String
+
+        return Banner(context, id, params, object : BannerAdEventListener {
+            override fun onAdLoaded() {
+                val builder = Yandex.EventResponse.Builder()
+
+                val response = builder.build()
+                api.callbacks.get(Event(id = id, name = "onAdLoaded"))?.success(response)
+            }
+
+            override fun onAdFailedToLoad(error: AdRequestError) {
+                val builder = Yandex.EventResponse.Builder()
+                builder.setCode(error.code.toLong())
+                builder.setDescription(error.description)
+
+                val response = builder.build()
+                api.callbacks.get(Event(id = id, name = "onAdFailedToLoad"))?.success(response)
+            }
+
+            override fun onLeftApplication() {
+                val builder = Yandex.EventResponse.Builder()
+
+                val response = builder.build()
+                api.callbacks.get(Event(id = id, name = "onLeftApplication"))?.success(response)
+            }
+
+            override fun onReturnedToApplication() {
+                val builder = Yandex.EventResponse.Builder()
+
+                val response = builder.build()
+                api.callbacks.get(Event(id = id, name = "onReturnedToApplication"))?.success(response)
+            }
+
+            override fun onImpression(data: ImpressionData?) {
+                Log.d("onimpression", data.toString())
+
+                val builder = Yandex.EventResponse.Builder()
+                builder.setData(data?.rawData ?: "")
+
+                val response = builder.build()
+                api.callbacks.get(Event(id = id, name = "onImpression"))?.success(response)
+            }
+
+            override fun onAdClicked() {
+                val builder = Yandex.EventResponse.Builder()
+
+                val response = builder.build()
+                api.callbacks.get(Event(id = id, name = "onAdClicked"))?.success(response)
+            }
+        });
+    }
+}
+
+class Banner(context: Context, id: String, params: Map<String?, Any?>?, listener: BannerAdEventListener) : PlatformView {
+    private val banner: BannerAdView
+
+    init {
+        banner = BannerAdView(context);
+        banner.setAdSize(AdSize.BANNER_320x50)
+        banner.setAdUnitId(id)
+        banner.setBannerAdEventListener(listener)
+
+        val request: AdRequest = AdRequest.Builder().build()
+        banner.loadAd(request)
+    }
+
+    override fun getView(): View {
+        return banner;
+    }
+
+    override fun dispose() {}
+}

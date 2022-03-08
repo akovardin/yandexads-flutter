@@ -1,33 +1,32 @@
-package ru.kovardin.flutter_yandex_ads.banner
+package ru.kovardin.flutter_yandex_ads.views
 
 import android.content.Context
-import android.graphics.Color
 import android.view.View
-import android.widget.TextView
 import com.yandex.mobile.ads.banner.AdSize
 import com.yandex.mobile.ads.banner.BannerAdEventListener
 import com.yandex.mobile.ads.banner.BannerAdView
 import com.yandex.mobile.ads.common.AdRequest
 import com.yandex.mobile.ads.common.AdRequestError
+import com.yandex.mobile.ads.common.ImpressionData
 import io.flutter.plugin.common.StandardMessageCodec
 import io.flutter.plugin.platform.PlatformView
 import io.flutter.plugin.platform.PlatformViewFactory
 
-class YandexAdsBanner : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
+class YandexAdsNative: PlatformViewFactory(StandardMessageCodec.INSTANCE) {
     override fun create(context: Context, viewId: Int, args: Any?): PlatformView {
-        return FlutterPlatformView(context, 1);
+        return Native(context, 1);
     }
 }
 
-class FlutterPlatformView(context: Context, id: Int) : PlatformView {
-//    private val textView: TextView
+class Native(context: Context, id: Int) : PlatformView {
+    //    private val textView: TextView
     private val banner: BannerAdView
 
     init {
 
         banner = BannerAdView(context);
-        banner.setAdSize(AdSize.stickySize(AdSize.FULL_WIDTH))
-        banner.setBlockId("R-M-1582183-1")
+        banner.setAdSize(AdSize.BANNER_320x50)
+        banner.setAdUnitId("R-M-1582183-1")
         banner.setBannerAdEventListener(object : BannerAdEventListener {
             override fun onAdLoaded() {
             }
@@ -35,10 +34,16 @@ class FlutterPlatformView(context: Context, id: Int) : PlatformView {
             override fun onAdFailedToLoad(error: AdRequestError) {
             }
 
+            override fun onAdClicked() {
+            }
+
             override fun onLeftApplication() {
             }
 
             override fun onReturnedToApplication() {
+            }
+
+            override fun onImpression(data: ImpressionData?) {
             }
         })
 

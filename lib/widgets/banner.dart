@@ -1,14 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_yandex_ads/yandex.dart';
 
-class YandexAdsBanner extends StatelessWidget {
-  const YandexAdsBanner({Key? key}) : super(key: key);
+class YandexAdsBannerWidget extends StatelessWidget {
+  YandexAdsBannerWidget({
+    Key? key,
+    Function? onAdLoaded,
+    Function? onAdFailedToLoad,
+    Function? onImpression,
+    Function? onAdClicked,
+    Function? onLeftApplication,
+    Function? onReturnedToApplication,
+    required this.id,
+    required this.ads,
+  }) : super(key: key) {
+    if (onAdLoaded != null) {
+      ads.setOnAdLoaded(id, onAdLoaded);
+    }
+
+    if (onAdFailedToLoad != null) {
+      ads.setOnAdFailedToLoad(id, onAdFailedToLoad);
+    }
+
+    if (onImpression != null) {
+      ads.setOnImpression(id, onImpression);
+    }
+
+    if (onAdClicked != null) {
+      ads.setOnAdCLicked(id, onAdClicked);
+    }
+
+    if (onLeftApplication != null) {
+      ads.setOnLeftApplication(id, onLeftApplication);
+    }
+
+    if (onReturnedToApplication != null) {
+      ads.setOnReturnedToApplication(id, onReturnedToApplication);
+    }
+  }
+
+  final String id;
+  final FlutterYandexAds ads;
 
   Widget build(BuildContext context) {
-    // This is used in the platform side to register the view.
     const String viewType = 'yandex-ads-banner';
-    // Pass parameters to the platform side.
-    final Map<String, dynamic> creationParams = <String, dynamic>{};
+
+    final Map<String, dynamic> creationParams = <String, dynamic>{
+      'id': id,
+    };
 
     return AndroidView(
       viewType: viewType,

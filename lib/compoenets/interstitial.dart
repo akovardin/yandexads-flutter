@@ -1,0 +1,5 @@
+class YandexAdsIntersttial {
+  void load() {
+
+  }
+}
