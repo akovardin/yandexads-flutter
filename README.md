@@ -2,6 +2,8 @@
 
 Yandex ADS for flutter applicaitions
 
+[Donnations](https://www.tinkoff.ru/cf/6xz8n4h0LzO)
+
 ## Roadmap
 
 Android
