@@ -4,18 +4,38 @@ Yandex ADS for flutter applicaitions
 
 ## Roadmap
 
+Android
+- [x] Banner
+- [x] Interstitial
+- [ ] Native
+- [ ] Rewarded
+
+iOS
 - [x] Banner
 - [ ] Interstitial
 - [ ] Native
 - [ ] Rewarded
 
+
 ## Getting Started
 
-Add to AndroidManifest.xml
+For android add to AndroidManifest.xml
 
 ```xml
 
 <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>
+```
+
+For ios add to Info.plist
+
+```xml
+<key>SKAdNetworkItems</key>
+<array>
+<dict>
+    <key>SKAdNetworkIdentifier</key>
+    <string>zq492l623r.skadnetwork</string>
+</dict>
+</array>
 ```
 
 Call initialization in main.dart
@@ -58,7 +78,9 @@ flutter pub run pigeon \
   --input pigeons/yandex.dart \
   --dart_out lib/pigeons/yandex.dart \
   --java_out ./android/src/main/kotlin/ru/kovardin/flutter_yandex_ads/pigeons/Yandex.java \
-  --java_package "ru.kovardin.flutter_yandex_ads.pigeons"
+  --java_package "ru.kovardin.flutter_yandex_ads.pigeons" \
+  --objc_header_out ./ios/Classes/pigeons/Yandex.h \
+  --objc_source_out ./ios/Classes/pigeons/Yandex.m
 
 
 flutter pub run pigeon \

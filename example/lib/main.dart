@@ -37,10 +37,10 @@ class _AppState extends State<App> {
           ),
           bottomNavigationBar: const TabBar(
             tabs: [
-              Tab(child: Text('Banner', style: TextStyle(color: Colors.black54))),
-              Tab(child: Text('Interstitial', style: TextStyle(color: Colors.black54))),
-              Tab(child: Text('Native', style: TextStyle(color: Colors.black54))),
-              Tab(child: Text('Rewarded', style: TextStyle(color: Colors.black54))),
+              Tab(child: Text('Banner', style: TextStyle(color: Colors.black54, fontSize: 12))),
+              Tab(child: Text('Interstitial', style: TextStyle(color: Colors.black54, fontSize: 12))),
+              Tab(child: Text('Native', style: TextStyle(color: Colors.black54, fontSize: 12))),
+              Tab(child: Text('Rewarded', style: TextStyle(color: Colors.black54, fontSize: 12))),
             ],
           ),
           body: TabBarView(
@@ -82,7 +82,6 @@ class _BannerScreenState extends State<BannerScreen> {
           height: 100,
           child: YandexAdsBannerWidget(
             ads: widget.ads,
-            // id: 'R-M-1582183-1',
             id: 'R-M-DEMO-320x50',
             onAdLoaded: () {
               print('banner onAdLoaded');

@@ -32,6 +32,7 @@ class FlutterYandexAdsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
   override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
     context = binding.applicationContext
 
+    // api set
     val api = YandexApi(context)
     Yandex.YandexAdsApi.setup(binding.binaryMessenger, api)
 
