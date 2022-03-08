@@ -3,10 +3,10 @@ import UIKit
 import YandexMobileAds
 
 class YandexAdsBanner: NSObject, FlutterPlatformViewFactory {
-    private var messenger: FlutterBinaryMessenger
+    private var api: YandexApi
 
-    init(messenger: FlutterBinaryMessenger) {
-        self.messenger = messenger
+    init(api: YandexApi) {
+        self.api = api
         super.init()
     }
 
@@ -15,7 +15,7 @@ class YandexAdsBanner: NSObject, FlutterPlatformViewFactory {
                 frame: frame,
                 viewIdentifier: viewId,
                 arguments: args,
-                binaryMessenger: messenger)
+                api: api)
     }
 
     public func createArgsCodec() -> FlutterMessageCodec & NSObjectProtocol {
@@ -25,12 +25,17 @@ class YandexAdsBanner: NSObject, FlutterPlatformViewFactory {
 
 class Banner: NSObject, FlutterPlatformView {
     private var banner: YMAAdView!
+    private var api: YandexApi!
+    private var id: String = ""
 
-    init(frame: CGRect, viewIdentifier viewId: Int64, arguments args: Any?, binaryMessenger messenger: FlutterBinaryMessenger?) {
+    init(frame: CGRect, viewIdentifier viewId: Int64, arguments args: Any?, api api: YandexApi?) {
         super.init()
 
         let params = args as! [String: String]
         let id = params["id"]
+
+        self.api = api
+        self.id = id ?? ""
 
         banner = YMAAdView(adUnitID: id ?? "", adSize: YMAAdSize.fixedSize(with: .init(width: 320, height: 100)))
         banner.delegate = self
@@ -45,7 +50,11 @@ class Banner: NSObject, FlutterPlatformView {
 
 extension Banner: YMAAdViewDelegate {
     func adViewDidLoad(_ adView: YMAAdView) {
-        print("Ad loaded")
+        let response = EventResponse()
+
+        if let callback = api.callbacks[EventKey(id: id, name: "onAdLoaded", type: EventType.BANNER.rawValue)] {
+            callback(response, nil)
+        }
     }
 
     func adViewDidFailLoading(_ adView: YMAAdView, error: Error) {
