@@ -28,7 +28,7 @@ class YandexAdsBanner(private val api: YandexApi) : PlatformViewFactory(Standard
                 val builder = Yandex.EventResponse.Builder()
 
                 val response = builder.build()
-                api.callbacks.get(EventKey(id = id, name = "onAdLoaded", type = EventType.BANNER.toString()))?.success(response)
+                api.callbacks.get(EventKey(id = id, name = "onAdLoaded", type = EventType.BANNER.type))?.success(response)
             }
 
             override fun onAdFailedToLoad(error: AdRequestError) {
@@ -37,38 +37,36 @@ class YandexAdsBanner(private val api: YandexApi) : PlatformViewFactory(Standard
                 builder.setDescription(error.description)
 
                 val response = builder.build()
-                api.callbacks.get(EventKey(id = id, name = "onAdFailedToLoad", type = EventType.BANNER.toString()))?.success(response)
+                api.callbacks.get(EventKey(id = id, name = "onAdFailedToLoad", type = EventType.BANNER.type))?.success(response)
             }
 
             override fun onLeftApplication() {
                 val builder = Yandex.EventResponse.Builder()
 
                 val response = builder.build()
-                api.callbacks.get(EventKey(id = id, name = "onLeftApplication", type = EventType.BANNER.toString()))?.success(response)
+                api.callbacks.get(EventKey(id = id, name = "onLeftApplication", type = EventType.BANNER.type))?.success(response)
             }
 
             override fun onReturnedToApplication() {
                 val builder = Yandex.EventResponse.Builder()
 
                 val response = builder.build()
-                api.callbacks.get(EventKey(id = id, name = "onReturnedToApplication", type = EventType.BANNER.toString()))?.success(response)
+                api.callbacks.get(EventKey(id = id, name = "onReturnedToApplication", type = EventType.BANNER.type))?.success(response)
             }
 
             override fun onImpression(data: ImpressionData?) {
-                Log.d("onimpression", data.toString())
-
                 val builder = Yandex.EventResponse.Builder()
                 builder.setData(data?.rawData ?: "")
 
                 val response = builder.build()
-                api.callbacks.get(EventKey(id = id, name = "onImpression", type = EventType.BANNER.toString()))?.success(response)
+                api.callbacks.get(EventKey(id = id, name = "onImpression", type = EventType.BANNER.type))?.success(response)
             }
 
             override fun onAdClicked() {
                 val builder = Yandex.EventResponse.Builder()
 
                 val response = builder.build()
-                api.callbacks.get(EventKey(id = id, name = "onAdClicked", type = EventType.BANNER.toString()))?.success(response)
+                api.callbacks.get(EventKey(id = id, name = "onAdClicked", type = EventType.BANNER.type))?.success(response)
             }
         });
     }

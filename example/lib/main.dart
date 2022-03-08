@@ -120,14 +120,23 @@ class _InterstitialScreenState extends State<InterstitialScreen> {
     super.initState();
 
     interstitial = YandexAdsIntersttialComponents(
-        id: 'R-M-DEMO-320x480',
-        ads: widget.ads,
-        onAdLoaded: () {
-          print('interstitial onAdLoaded');
-        },
-        onAdFailedToLoad: (AdLoadError err) {
-          print('interstitial onAdFailedToLoad code: ${err.code}, description: ${err.description}');
-        }
+      id: 'R-M-DEMO-320x480',
+      ads: widget.ads,
+      onAdLoaded: () {
+        print('interstitial onAdLoaded');
+      },
+      onAdFailedToLoad: (AdLoadError err) {
+        print('interstitial onAdFailedToLoad code: ${err.code}, description: ${err.description}');
+      },
+      onAdDismissed: () {
+        print("interstitial onAdDismissed");
+      },
+      onAdShown: () {
+        print("interstitial onAdShown");
+      },
+      onImpression: (String? data) {
+        print('interstitial onImpression ${data}');
+      },
     );
 
     interstitial.load();

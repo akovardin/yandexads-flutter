@@ -36,4 +36,10 @@ abstract class YandexAdsApi {
 
   @async
   EventResponse onReturnedToApplication(EventRequest request);
+
+  @async
+  EventResponse onAdShown(EventRequest request);
+
+  @async
+  EventResponse onAdDismissed(EventRequest request);
 }

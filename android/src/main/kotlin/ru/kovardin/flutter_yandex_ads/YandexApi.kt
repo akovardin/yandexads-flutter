@@ -43,4 +43,12 @@ class YandexApi(private val context: Context): Yandex.YandexAdsApi {
     override fun onReturnedToApplication(request: Yandex.EventRequest?, result: Yandex.Result<Yandex.EventResponse>?) {
         callbacks.put(EventKey(id = request?.id ?: "", name = request?.name ?: "", type = request?.type ?: ""), result!!)
     }
+
+    override fun onAdShown(request: Yandex.EventRequest?, result: Yandex.Result<Yandex.EventResponse>?) {
+        callbacks.put(EventKey(id = request?.id ?: "", name = request?.name ?: "", type = request?.type ?: ""), result!!)
+    }
+
+    override fun onAdDismissed(request: Yandex.EventRequest?, result: Yandex.Result<Yandex.EventResponse>?) {
+        callbacks.put(EventKey(id = request?.id ?: "", name = request?.name ?: "", type = request?.type ?: ""), result!!)
+    }
 }

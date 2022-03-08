@@ -22,27 +22,39 @@ class FlutterYandexAds {
     });
   }
 
-  void setOnImpression(String id, String type, Function onImpression) {
+  void setOnImpression(String id, String type, Function callback) {
     api.onImpression(EventRequest(id: id, name: 'onImpression', type: type)).then((value) {
-      onImpression(value.data);
+      callback(value.data);
     });
   }
 
-  void setOnAdCLicked(String id, String type, Function onAdClicked) {
+  void setOnAdCLicked(String id, String type, Function callback) {
     api.onAdClicked(EventRequest(id: id, name: 'onAdClicked', type: type)).then((value) {
-      onAdClicked();
+      callback();
     });
   }
 
-  void setOnLeftApplication(String id, String type, Function onLeftApplication) {
+  void setOnLeftApplication(String id, String type, Function callback) {
     api.onLeftApplication(EventRequest(id: id, name: 'onLeftApplication', type: type)).then((value) {
-      onLeftApplication();
+      callback();
     });
   }
 
-  void setOnReturnedToApplication(String id, String type, Function onReturnedToApplication) {
+  void setOnReturnedToApplication(String id, String type, Function callback) {
     api.onReturnedToApplication(EventRequest(id: id, name: 'onReturnedToApplication', type: type)).then((value) {
-      onReturnedToApplication();
+      callback();
+    });
+  }
+
+  void setOnAdShown(String id, String type, Function callback) {
+    api.onAdShown(EventRequest(id: id, name: 'onAdShown', type: type)).then((value) {
+      callback();
+    });
+  }
+
+  void setOnAdDismissed(String id, String type, Function callback) {
+    api.onAdShown(EventRequest(id: id, name: 'onAdDismissed', type: type)).then((value) {
+      callback();
     });
   }
 }
@@ -55,8 +67,8 @@ class AdLoadError {
 }
 
 class EventTypes {
-  static final BANNER = 'banner';
-  static final INTERSTITIAL = 'interstitial';
-  static final NATIVE = 'native';
-  static final REWARDED = 'rewarded';
+  static const BANNER = 'banner';
+  static const INTERSTITIAL = 'interstitial';
+  static const NATIVE = 'native';
+  static const REWARDED = 'rewarded';
 }

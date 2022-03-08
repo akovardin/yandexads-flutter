@@ -205,6 +205,8 @@ public class Yandex {
     void onAdClicked(EventRequest request, Result<EventResponse> result);
     void onLeftApplication(EventRequest request, Result<EventResponse> result);
     void onReturnedToApplication(EventRequest request, Result<EventResponse> result);
+    void onAdShown(EventRequest request, Result<EventResponse> result);
+    void onAdDismissed(EventRequest request, Result<EventResponse> result);
 
     /** The codec used by YandexAdsApi. */
     static MessageCodec<Object> getCodec() {
@@ -426,6 +428,74 @@ public class Yandex {
               };
 
               api.onReturnedToApplication(requestArg, resultCallback);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+              reply.reply(wrapped);
+            }
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.YandexAdsApi.onAdShown", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              ArrayList<Object> args = (ArrayList<Object>)message;
+              EventRequest requestArg = (EventRequest)args.get(0);
+              if (requestArg == null) {
+                throw new NullPointerException("requestArg unexpectedly null.");
+              }
+              Result<EventResponse> resultCallback = new Result<EventResponse>() {
+                public void success(EventResponse result) {
+                  wrapped.put("result", result);
+                  reply.reply(wrapped);
+                }
+                public void error(Throwable error) {
+                  wrapped.put("error", wrapError(error));
+                  reply.reply(wrapped);
+                }
+              };
+
+              api.onAdShown(requestArg, resultCallback);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+              reply.reply(wrapped);
+            }
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.YandexAdsApi.onAdDismissed", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              ArrayList<Object> args = (ArrayList<Object>)message;
+              EventRequest requestArg = (EventRequest)args.get(0);
+              if (requestArg == null) {
+                throw new NullPointerException("requestArg unexpectedly null.");
+              }
+              Result<EventResponse> resultCallback = new Result<EventResponse>() {
+                public void success(EventResponse result) {
+                  wrapped.put("result", result);
+                  reply.reply(wrapped);
+                }
+                public void error(Throwable error) {
+                  wrapped.put("error", wrapError(error));
+                  reply.reply(wrapped);
+                }
+              };
+
+              api.onAdDismissed(requestArg, resultCallback);
             }
             catch (Error | RuntimeException exception) {
               wrapped.put("error", wrapError(exception));

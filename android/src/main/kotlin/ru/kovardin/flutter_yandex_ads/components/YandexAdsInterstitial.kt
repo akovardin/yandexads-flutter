@@ -24,7 +24,7 @@ class YandexAdsInterstitial(private val api: YandexApi, private val context: Con
                 val builder = Yandex.EventResponse.Builder()
 
                 val response = builder.build()
-                api.callbacks.get(EventKey(id = id ?: "", name = "onAdLoaded", type = EventType.INTERSTITIAL.toString()))?.success(response)
+                api.callbacks.get(EventKey(id = id ?: "", name = "onAdLoaded", type = EventType.INTERSTITIAL.type))?.success(response)
             }
 
             override fun onAdFailedToLoad(error: AdRequestError) {
@@ -33,25 +33,51 @@ class YandexAdsInterstitial(private val api: YandexApi, private val context: Con
                 builder.setDescription(error.description)
 
                 val response = builder.build()
-                api.callbacks.get(EventKey(id = id ?: "", name = "onAdFailedToLoad", type = EventType.INTERSTITIAL.toString()))?.success(response)
+                api.callbacks.get(EventKey(id = id ?: "", name = "onAdFailedToLoad", type = EventType.INTERSTITIAL.type))?.success(response)
             }
 
             override fun onAdShown() {
+                val builder = Yandex.EventResponse.Builder()
+
+                val response = builder.build()
+                val key = EventKey(id = id ?: "", name = "onAdShown", type = EventType.INTERSTITIAL.type)
+                api.callbacks.get(key)?.success(response)
             }
 
             override fun onAdDismissed() {
+                val builder = Yandex.EventResponse.Builder()
+
+                val response = builder.build()
+                api.callbacks.get(EventKey(id = id ?: "", name = "onAdDismissed", type = EventType.INTERSTITIAL.type))?.success(response)
             }
 
             override fun onAdClicked() {
+                val builder = Yandex.EventResponse.Builder()
+
+                val response = builder.build()
+                api.callbacks.get(EventKey(id = id ?: "", name = "onAdClicked", type = EventType.INTERSTITIAL.type))?.success(response)
             }
 
             override fun onLeftApplication() {
+                val builder = Yandex.EventResponse.Builder()
+
+                val response = builder.build()
+                api.callbacks.get(EventKey(id = id ?: "", name = "onLeftApplication", type = EventType.INTERSTITIAL.type))?.success(response)
             }
 
             override fun onReturnedToApplication() {
+                val builder = Yandex.EventResponse.Builder()
+
+                val response = builder.build()
+                api.callbacks.get(EventKey(id = id ?: "", name = "onReturnedToApplication", type = EventType.INTERSTITIAL.type))?.success(response)
             }
 
             override fun onImpression(data: ImpressionData?) {
+                val builder = Yandex.EventResponse.Builder()
+                builder.setData(data?.rawData ?: "")
+
+                val response = builder.build()
+                api.callbacks.get(EventKey(id = id ?: "", name = "onImpression", type = EventType.INTERSTITIAL.type))?.success(response)
             }
         })
     }
