@@ -15,8 +15,6 @@ class YandexAdsIntersttialComponents {
     required this.ads,
   }) {
     interstitial = YandexAdsInterstitial();
-    interstitial.config(id);
-
     if (onAdLoaded != null) {
       ads.setOnAdLoaded(id, EventTypes.INTERSTITIAL, onAdLoaded);
     }
@@ -55,7 +53,7 @@ class YandexAdsIntersttialComponents {
   late YandexAdsInterstitial interstitial;
 
   void load() {
-    interstitial.load();
+    interstitial.load(id);
   }
 
   void show() {

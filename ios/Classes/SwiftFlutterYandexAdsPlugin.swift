@@ -6,14 +6,15 @@ public class SwiftFlutterYandexAdsPlugin: NSObject, FlutterPlugin {
     let messenger : FlutterBinaryMessenger = registrar.messenger()
 
     // api setup
-    let api : YandexAdsApi & NSObjectProtocol = YandexApi()
+    let api = YandexApi()
     YandexAdsApiSetup(messenger, api)
 
     // widgets
-    registrar.register(YandexAdsBanner(messenger: messenger), withId: "yandex-ads-banner")
+    registrar.register(YandexAdsBanner(api: api), withId: "yandex-ads-banner")
 
     // components
-    // todo
+    YandexAdsInterstitialSetup(messenger, YandexAdsInterstitialComponent(api: api))
+
   }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {

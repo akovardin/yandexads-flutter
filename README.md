@@ -2,6 +2,8 @@
 
 Yandex ADS for flutter applicaitions
 
+[Donnations](https://www.tinkoff.ru/cf/6xz8n4h0LzO)
+
 ## Roadmap
 
 Android
@@ -12,7 +14,7 @@ Android
 
 iOS
 - [x] Banner
-- [ ] Interstitial
+- [x] Interstitial
 - [ ] Native
 - [ ] Rewarded
 
@@ -87,11 +89,15 @@ flutter pub run pigeon \
   --input pigeons/interstitial.dart \
   --dart_out lib/pigeons/interstitial.dart \
   --java_out ./android/src/main/kotlin/ru/kovardin/flutter_yandex_ads/pigeons/Interstitial.java \
-  --java_package "ru.kovardin.flutter_yandex_ads.pigeons"
+  --java_package "ru.kovardin.flutter_yandex_ads.pigeons" \
+  --objc_header_out ./ios/Classes/pigeons/Interstitial.h \
+  --objc_source_out ./ios/Classes/pigeons/Interstitial.m
 
 
 flutter pub run pigeon \
   --input pigeons/rewarded.dart \
   --dart_out lib/pigeons/rewarded.dart \
   --java_out ./android/src/main/kotlin/ru/kovardin/flutter_yandex_ads/pigeons/Rewarded.java \
-  --java_package "ru.kovardin.flutter_yandex_ads.pigeons"
+  --java_package "ru.kovardin.flutter_yandex_ads.pigeons" \
+  --objc_header_out ./ios/Classes/pigeons/Rewarded.h \
+  --objc_source_out ./ios/Classes/pigeons/Rewarded.m
