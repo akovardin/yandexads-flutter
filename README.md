@@ -14,7 +14,7 @@ Android
 
 iOS
 - [x] Banner
-- [ ] Interstitial
+- [x] Interstitial
 - [ ] Native
 - [ ] Rewarded
 
