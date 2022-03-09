@@ -31,25 +31,27 @@ class _AppState extends State<App> {
     return MaterialApp(
       home: DefaultTabController(
         length: 4,
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text('Yandex ADS'),
-          ),
-          bottomNavigationBar: const TabBar(
-            tabs: [
-              Tab(child: Text('Banner', style: TextStyle(color: Colors.black54, fontSize: 12))),
-              Tab(child: Text('Interstitial', style: TextStyle(color: Colors.black54, fontSize: 12))),
-              Tab(child: Text('Native', style: TextStyle(color: Colors.black54, fontSize: 12))),
-              Tab(child: Text('Rewarded', style: TextStyle(color: Colors.black54, fontSize: 12))),
-            ],
-          ),
-          body: TabBarView(
-            children: [
-              BannerScreen(ads: ads),
-              InterstitialScreen(ads: ads),
-              Icon(Icons.directions_bike),
-              Icon(Icons.directions_bike),
-            ],
+        child: SafeArea(
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text('Yandex ADS'),
+            ),
+            bottomNavigationBar: const TabBar(
+              tabs: [
+                Tab(child: Text('Banner', style: TextStyle(color: Colors.black54, fontSize: 12))),
+                Tab(child: Text('Interstitial', style: TextStyle(color: Colors.black54, fontSize: 12))),
+                Tab(child: Text('Native', style: TextStyle(color: Colors.black54, fontSize: 12))),
+                Tab(child: Text('Rewarded', style: TextStyle(color: Colors.black54, fontSize: 12))),
+              ],
+            ),
+            body: TabBarView(
+              children: [
+                BannerScreen(ads: ads),
+                InterstitialScreen(ads: ads),
+                Icon(Icons.directions_bike),
+                Icon(Icons.directions_bike),
+              ],
+            ),
           ),
         ),
       ),
