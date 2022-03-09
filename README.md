@@ -98,4 +98,6 @@ flutter pub run pigeon \
   --input pigeons/rewarded.dart \
   --dart_out lib/pigeons/rewarded.dart \
   --java_out ./android/src/main/kotlin/ru/kovardin/flutter_yandex_ads/pigeons/Rewarded.java \
-  --java_package "ru.kovardin.flutter_yandex_ads.pigeons"
+  --java_package "ru.kovardin.flutter_yandex_ads.pigeons" \
+  --objc_header_out ./ios/Classes/pigeons/Rewarded.h \
+  --objc_source_out ./ios/Classes/pigeons/Rewarded.m

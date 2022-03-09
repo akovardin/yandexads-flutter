@@ -14,9 +14,7 @@ NSObject<FlutterMessageCodec> *YandexAdsInterstitialGetCodec(void);
 
 @protocol YandexAdsInterstitial
 /// @return `nil` only when `error != nil`.
-- (void)configId:(NSString *)id error:(FlutterError *_Nullable *_Nonnull)error;
-/// @return `nil` only when `error != nil`.
-- (void)loadWithError:(FlutterError *_Nullable *_Nonnull)error;
+- (void)loadId:(NSString *)id error:(FlutterError *_Nullable *_Nonnull)error;
 /// @return `nil` only when `error != nil`.
 - (void)showWithError:(FlutterError *_Nullable *_Nonnull)error;
 @end

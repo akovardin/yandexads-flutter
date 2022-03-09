@@ -58,23 +58,54 @@ extension Banner: YMAAdViewDelegate {
     }
 
     func adViewDidFailLoading(_ adView: YMAAdView, error: Error) {
-        print("Ad failed loading. Error: \(error)")
+        let response = EventResponse()
+        response.code = error._code as NSNumber
+        response.description = error._domain
+
+        if let callback = api.callbacks[EventKey(id: id, name: "onAdFailedToLoad", type: EventType.BANNER.rawValue)] {
+            callback(response, nil)
+        }
+    }
+
+    func adViewDidClick(_ adView: YMAAdView) {
+        let response = EventResponse()
+
+        if let callback = api.callbacks[EventKey(id: id, name: "onAdClicked", type: EventType.BANNER.rawValue)] {
+            callback(response, nil)
+        }
     }
 
     func adViewWillLeaveApplication(_ adView: YMAAdView) {
-        print("Ad will leave application")
+        let response = EventResponse()
+
+        if let callback = api.callbacks[EventKey(id: id, name: "onLeftApplication", type: EventType.BANNER.rawValue)] {
+            callback(response, nil)
+        }
     }
 
     func adView(_ adView: YMAAdView, willPresentScreen viewController: UIViewController?) {
-        print("Ad will present screen")
+        let response = EventResponse()
+
+        if let callback = api.callbacks[EventKey(id: id, name: "onAdShown", type: EventType.BANNER.rawValue)] {
+            callback(response, nil)
+        }
     }
 
     func adView(_ adView: YMAAdView, didDismissScreen viewController: UIViewController?) {
-        print("Ad did dismiss screen")
+        let response = EventResponse()
+
+        if let callback = api.callbacks[EventKey(id: id, name: "onAdDismissed", type: EventType.BANNER.rawValue)] {
+            callback(response, nil)
+        }
     }
 
     func adView(_ adView: YMAAdView, didTrackImpressionWith impressionData: YMAImpressionData?) {
-        print("Ad did dismiss screen")
+        let response = EventResponse()
+        response.data = impressionData?.rawData ?? ""
+
+        if let callback = api.callbacks[EventKey(id: id, name: "onImpression", type: EventType.BANNER.rawValue)] {
+            callback(response, nil)
+        }
     }
 }
 

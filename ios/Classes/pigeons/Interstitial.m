@@ -64,34 +64,16 @@ void YandexAdsInterstitialSetup(id<FlutterBinaryMessenger> binaryMessenger, NSOb
   {
     FlutterBasicMessageChannel *channel =
       [FlutterBasicMessageChannel
-        messageChannelWithName:@"dev.flutter.pigeon.YandexAdsInterstitial.config"
-        binaryMessenger:binaryMessenger
-        codec:YandexAdsInterstitialGetCodec()];
-    if (api) {
-      NSCAssert([api respondsToSelector:@selector(configId:error:)], @"YandexAdsInterstitial api (%@) doesn't respond to @selector(configId:error:)", api);
-      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
-        NSArray *args = message;
-        NSString *arg_id = args[0];
-        FlutterError *error;
-        [api configId:arg_id error:&error];
-        callback(wrapResult(nil, error));
-      }];
-    }
-    else {
-      [channel setMessageHandler:nil];
-    }
-  }
-  {
-    FlutterBasicMessageChannel *channel =
-      [FlutterBasicMessageChannel
         messageChannelWithName:@"dev.flutter.pigeon.YandexAdsInterstitial.load"
         binaryMessenger:binaryMessenger
         codec:YandexAdsInterstitialGetCodec()];
     if (api) {
-      NSCAssert([api respondsToSelector:@selector(loadWithError:)], @"YandexAdsInterstitial api (%@) doesn't respond to @selector(loadWithError:)", api);
+      NSCAssert([api respondsToSelector:@selector(loadId:error:)], @"YandexAdsInterstitial api (%@) doesn't respond to @selector(loadId:error:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_id = args[0];
         FlutterError *error;
-        [api loadWithError:&error];
+        [api loadId:arg_id error:&error];
         callback(wrapResult(nil, error));
       }];
     }
