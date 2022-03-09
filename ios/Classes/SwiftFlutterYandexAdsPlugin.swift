@@ -13,7 +13,8 @@ public class SwiftFlutterYandexAdsPlugin: NSObject, FlutterPlugin {
     registrar.register(YandexAdsBanner(api: api), withId: "yandex-ads-banner")
 
     // components
-//    YandexAdsInterstitialSetUp(messenger, YandexAdsInterstitialComponent())
+    YandexAdsInterstitialSetup(messenger, YandexAdsInterstitialComponent())
+
   }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
