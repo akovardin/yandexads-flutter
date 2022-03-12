@@ -21,6 +21,14 @@ iOS
 
 ## Getting Started
 
+Install package
+
+```yaml
+flutter_yandex_ads:
+  git:
+    url: https://gitflic.ru/project/kovardin/flutter-yandex-ads.git
+```
+
 For android add to AndroidManifest.xml
 
 ```xml
@@ -39,6 +47,12 @@ For ios add to Info.plist
 </dict>
 </array>
 ```
+And set for ios in Podfile
+
+```
+#use_frameworks!
+```
+
 
 Call initialization in main.dart
 

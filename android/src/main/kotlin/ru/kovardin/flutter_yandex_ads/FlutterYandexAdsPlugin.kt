@@ -17,6 +17,7 @@ import ru.kovardin.flutter_yandex_ads.pigeons.Interstitial
 import ru.kovardin.flutter_yandex_ads.pigeons.Rewarded
 import ru.kovardin.flutter_yandex_ads.views.YandexAdsBanner
 import ru.kovardin.flutter_yandex_ads.pigeons.Yandex
+import ru.kovardin.flutter_yandex_ads.views.YandexAdsNative
 
 /** FlutterYandexAdsPlugin */
 class FlutterYandexAdsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
@@ -42,6 +43,7 @@ class FlutterYandexAdsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
 
     // widgets
     binding.platformViewRegistry.registerViewFactory("yandex-ads-banner", YandexAdsBanner(api));
+    binding.platformViewRegistry.registerViewFactory("yandex-ads-native", YandexAdsNative());
   }
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
