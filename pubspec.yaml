@@ -1,7 +1,7 @@
 name: flutter_yandex_ads
-description: A new Flutter project.
+description: Yandex Ads support for flutter applications.
 version: 0.0.1
-homepage:
+homepage: https://gitflic.ru/project/kovardin/flutter-yandex-appmetrica
 
 environment:
   sdk: ">=2.16.1 <3.0.0"
