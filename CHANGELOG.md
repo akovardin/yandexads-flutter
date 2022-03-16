@@ -1,3 +1,7 @@
+## 0.0.2+1
+
+* Fixed package description
+
 ## 0.0.2
 
 * Fixed exception on ad callbacks
