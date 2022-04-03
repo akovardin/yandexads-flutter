@@ -1,6 +1,6 @@
 ## 0.0.4
 
-* Fixed errors n start/detach  activity
+* Fixed errors on start/detach  activity
 
 ## 0.0.3
 
