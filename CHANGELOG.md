@@ -1,3 +1,7 @@
+## 0.0.3+1 
+
+* Fixed errors n start/detach  activity
+
 ## 0.0.3
 
 * Fixed not implemented error(Android) and error description(iOS)
