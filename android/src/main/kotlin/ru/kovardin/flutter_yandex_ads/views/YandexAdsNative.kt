@@ -9,15 +9,15 @@ import io.flutter.plugin.platform.PlatformView
 import io.flutter.plugin.platform.PlatformViewFactory
 
 class YandexAdsNative: PlatformViewFactory(StandardMessageCodec.INSTANCE) {
-    override fun create(context: Context, viewId: Int, args: Any?): PlatformView {
+    override fun create(context: Context?, viewId: Int, args: Any?): PlatformView {
         return Native(context, 1);
     }
 }
 
-class Native(context: Context, id: Int) : PlatformView {
+class Native(context: Context?, id: Int) : PlatformView {
     var textView: TextView
     init {
-        textView = TextView(context)
+        textView = TextView(context!!)
         textView.textSize = 14f
         textView.setBackgroundColor(Color.rgb(255, 255, 255))
         textView.text = "Rendered on a native Android view (id: $id)"

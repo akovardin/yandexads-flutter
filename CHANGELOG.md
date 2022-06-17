@@ -1,3 +1,7 @@
+## 0.0.5
+
+* Fixed android build errors
+
 ## 0.0.4
 
 * Fixed errors on start/detach  activity

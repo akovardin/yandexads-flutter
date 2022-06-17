@@ -19,7 +19,7 @@ import ru.kovardin.flutter_yandex_ads.pigeons.Yandex
 
 class YandexAdsBanner(private val api: YandexApi) : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
 
-    override fun create(context: Context, viewId: Int, args: Any?): PlatformView {
+    override fun create(context: Context?, viewId: Int, args: Any?): PlatformView {
         val params = args as Map<String?, Any?>?
         val id: String = params?.get("id") as String
 
@@ -72,11 +72,11 @@ class YandexAdsBanner(private val api: YandexApi) : PlatformViewFactory(Standard
     }
 }
 
-class Banner(context: Context, id: String, params: Map<String?, Any?>?, listener: BannerAdEventListener) : PlatformView {
+class Banner(context: Context?, id: String, params: Map<String?, Any?>?, listener: BannerAdEventListener) : PlatformView {
     private val banner: BannerAdView
 
     init {
-        banner = BannerAdView(context);
+        banner = BannerAdView(context!!);
         banner.setAdSize(AdSize.BANNER_320x50)
         banner.setAdUnitId(id)
         banner.setBannerAdEventListener(listener)
