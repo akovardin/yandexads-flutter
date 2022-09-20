@@ -36,21 +36,81 @@ For android add to AndroidManifest.xml
 <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>
 ```
 
-For ios add to Info.plist
+For AdMob on android add this code:
+
+```xml
+<meta-data
+   android:name="com.google.android.gms.ads.APPLICATION_ID"
+   android:value="ca-app-pub-3940256099942544~1458002511"/>
+```
+
+where `ca-app-pub-3940256099942544~1458002511` is app id from admob
+
+## Mediation
+
+For AdMob mediation integration, add the following code on ios in to Info.plist:
+
+```xml
+<key>GADApplicationIdentifier</key>
+<string>ca-app-pub-3940256099942544~1458002511</string>
+```
+
+For SKAdNetwork on ios add this code to Info.plist:
 
 ```xml
 <key>SKAdNetworkItems</key>
 <array>
+<!-- Yandex Ads -->
 <dict>
     <key>SKAdNetworkIdentifier</key>
     <string>zq492l623r.skadnetwork</string>
+</dict>
+<dict>
+    <!-- AdMob -->
+    <key>SKAdNetworkIdentifier</key>
+    <string>cstr6suwn9.skadnetwork</string>
+</dict>
+<dict>
+    <!-- MyTarget -->
+    <key>SKAdNetworkIdentifier</key>
+    <string>n9x2a789qt.skadnetwork</string>
+</dict>
+<dict>
+    <!-- MyTarget -->
+    <key>SKAdNetworkIdentifier</key>
+    <string>r26jy69rpl.skadnetwork</string>
+</dict>
+<dict>
+    <!-- Start.io -->
+    <key>SKAdNetworkIdentifier</key>
+    <string>5l3tpt7t6e.skadnetwork</string>
+</dict>
+<dict>
+    <!-- UnityAds -->
+    <key>SKAdNetworkIdentifier</key>
+    <string>4dzt52r2t5.skadnetwork</string>
+</dict>
+<dict>
+    <!-- IronSource -->
+    <key>SKAdNetworkIdentifier</key>
+    <string>su67r6k2v3.skadnetwork</string>
+</dict>
+<dict>
+    <!-- Applovin -->
+    <key>SKAdNetworkIdentifier</key>
+    <string>ludvb6z3bs.skadnetwork</string>
+</dict>
+<dict>
+    <!-- Mintegral -->
+    <key>SKAdNetworkIdentifier</key>
+    <string>KBD757YWX3.skadnetwork</string>
 </dict>
 </array>
 ```
 And set for ios in Podfile
 
 ```
-#use_frameworks!
+use_frameworks! :linkage => :static
 ```
 
 

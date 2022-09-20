@@ -28,7 +28,7 @@ class Banner: NSObject, FlutterPlatformView {
     private var api: YandexApi!
     private var id: String = ""
 
-    init(frame: CGRect, viewIdentifier viewId: Int64, arguments args: Any?, api api: YandexApi?) {
+    init(frame: CGRect, viewIdentifier viewId: Int64, arguments args: Any?, api: YandexApi?) {
         super.init()
 
         let params = args as! [String: String]
@@ -37,7 +37,7 @@ class Banner: NSObject, FlutterPlatformView {
         self.api = api
         self.id = id ?? ""
 
-        banner = YMAAdView(adUnitID: id ?? "", adSize: YMAAdSize.fixedSize(with: .init(width: 320, height: 100)))
+        banner = YMAAdView(adUnitID: id ?? "", adSize: YMAAdSize.flexibleSize(with: .init(width: 320, height: 100)))
         banner.delegate = self
         banner.removeFromSuperview()
         banner.loadAd()

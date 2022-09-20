@@ -77,7 +77,7 @@ class Banner(context: Context?, id: String, params: Map<String?, Any?>?, listene
 
     init {
         banner = BannerAdView(context!!);
-        banner.setAdSize(AdSize.BANNER_320x50)
+        banner.setAdSize(AdSize.flexibleSize(320, 100))
         banner.setAdUnitId(id)
         banner.setBannerAdEventListener(listener)
 

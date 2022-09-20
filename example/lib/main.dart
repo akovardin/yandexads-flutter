@@ -121,7 +121,7 @@ class _InterstitialScreenState extends State<InterstitialScreen> {
     super.initState();
 
     interstitial = YandexAdsIntersttialComponents(
-      id: 'R-M-DEMO-320x480',
+      id: 'R-M-338238-18',
       ads: widget.ads,
       onAdLoaded: () {
         print('interstitial onAdLoaded');

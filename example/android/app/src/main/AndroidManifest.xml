@@ -9,6 +9,9 @@
         android:label="flutter_yandex_ads_example"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+       <meta-data
+               android:name="com.google.android.gms.ads.APPLICATION_ID"
+               android:value="ca-app-pub-3940256099942544~1458002511"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

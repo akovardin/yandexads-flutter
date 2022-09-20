@@ -43,7 +43,6 @@ extension YandexAdsInterstitialComponent: YMAInterstitialAdDelegate {
     func interstitialAdDidFail(toLoad interstitialAd: YMAInterstitialAd, error: Error) {
         let response = EventResponse()
         response.code = error._code as NSNumber
-        response.description = error._domain
 
         if let callback = api.callbacks[EventKey(id: id, name: "onAdFailedToLoad", type: EventType.INTERSTITIAL.rawValue)] {
             callback(response, nil)
