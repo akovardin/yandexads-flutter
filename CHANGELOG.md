@@ -1,3 +1,8 @@
+## 0.0.7
+
+* Bump to 5.3.2 yandex ads dependency version for android 
+* Fixed issue #5 "lateinit property channel has not been initialized"
+
 ## 0.0.6
 
 * Bump to 5.3.0 yandex ads dependency version for ios and android
