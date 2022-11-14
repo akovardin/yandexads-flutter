@@ -1,6 +1,6 @@
 name: flutter_yandex_ads
 description: Yandex Ads support for flutter applications.
-version: 0.0.7
+version: 0.0.7+1
 homepage: https://gitflic.ru/project/kovardin/flutter-yandex-ads
 
 environment:
