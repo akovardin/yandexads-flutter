@@ -1,3 +1,12 @@
+## 1.0.0
+
+* Changed package initialization method
+* Added Native format
+* Added Rewarded format
+* Bump android to 5.4.0
+* Bump ios to 5.3.1
+* Added width/height params for banner
+
 ## 0.0.7
 
 * Bump to 5.3.2 yandex ads dependency version for android 
