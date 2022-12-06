@@ -1,9 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_yandex_ads/yandex.dart';
+import 'package:flutter_yandex_ads/pigeons/banner.dart';
 
 class YandexAdsBannerWidget extends StatelessWidget {
   YandexAdsBannerWidget({
@@ -15,35 +13,55 @@ class YandexAdsBannerWidget extends StatelessWidget {
     Function? onLeftApplication,
     Function? onReturnedToApplication,
     required this.id,
-    required this.ads,
+    required this.width,
+    required this.height,
   }) : super(key: key) {
+    var banner = YandexAdsBanner();
+
+    banner.make(id, width, height);
+
     if (onAdLoaded != null) {
-      ads.setOnAdLoaded(id, EventTypes.BANNER, onAdLoaded);
+      banner.onAdLoaded(id).then((value) {
+        onAdLoaded();
+      });
     }
 
     if (onAdFailedToLoad != null) {
-      ads.setOnAdFailedToLoad(id, EventTypes.BANNER, onAdFailedToLoad);
+      banner.onAdFailedToLoad(id).then((value) {
+        onAdFailedToLoad(value);
+      });
     }
 
     if (onImpression != null) {
-      ads.setOnImpression(id, EventTypes.BANNER, onImpression);
+      banner.onImpression(id).then((value) {
+        onImpression(value);
+      });
     }
 
     if (onAdClicked != null) {
-      ads.setOnAdCLicked(id, EventTypes.BANNER, onAdClicked);
+      banner.onAdClicked(id).then((value) {
+        onAdClicked();
+      });
     }
 
     if (onLeftApplication != null) {
-      ads.setOnLeftApplication(id, EventTypes.BANNER, onLeftApplication);
+      banner.onLeftApplication(id).then((value) {
+        onLeftApplication();
+      });
     }
 
     if (onReturnedToApplication != null) {
-      ads.setOnReturnedToApplication(id, EventTypes.BANNER, onReturnedToApplication);
+      banner.onReturnedToApplication(id).then((value) {
+        onReturnedToApplication();
+      });
     }
+
+    banner.load(id);
   }
 
   final String id;
-  final FlutterYandexAds ads;
+  final int width;
+  final int height;
 
   Widget build(BuildContext context) {
     const String viewType = 'yandex-ads-banner';

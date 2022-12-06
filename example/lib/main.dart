@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_yandex_ads/compoenets/interstitial.dart';
-import 'dart:async';
-
+import 'package:flutter_yandex_ads/components/interstitial.dart';
+import 'package:flutter_yandex_ads/components/rewarded.dart';
+import 'package:flutter_yandex_ads/pigeons/banner.dart';
+import 'package:flutter_yandex_ads/pigeons/interstitial.dart';
+import 'package:flutter_yandex_ads/pigeons/rewarded.dart';
 import 'package:flutter_yandex_ads/widgets/banner.dart';
+import 'package:flutter_yandex_ads/widgets/native.dart';
 import 'package:flutter_yandex_ads/yandex.dart';
 
 void main() {
@@ -17,13 +20,11 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  FlutterYandexAds ads = FlutterYandexAds();
-
   @override
   void initState() {
     super.initState();
 
-    ads.initialize();
+    FlutterYandexAds.initialize();
   }
 
   @override
@@ -44,12 +45,12 @@ class _AppState extends State<App> {
                 Tab(child: Text('Rewarded', style: TextStyle(color: Colors.black54, fontSize: 12))),
               ],
             ),
-            body: TabBarView(
+            body: const TabBarView(
               children: [
-                BannerScreen(ads: ads),
-                InterstitialScreen(ads: ads),
-                Icon(Icons.directions_bike),
-                Icon(Icons.directions_bike),
+                BannerScreen(),
+                InterstitialScreen(),
+                NativeScreen(),
+                RewardedScreen(),
               ],
             ),
           ),
@@ -60,9 +61,7 @@ class _AppState extends State<App> {
 }
 
 class BannerScreen extends StatefulWidget {
-  BannerScreen({Key? key, required this.ads}) : super(key: key);
-
-  FlutterYandexAds ads;
+  const BannerScreen({Key? key}) : super(key: key);
 
   @override
   _BannerScreenState createState() => _BannerScreenState();
@@ -79,20 +78,21 @@ class _BannerScreenState extends State<BannerScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('Banner'),
-        Container(
+        const Text('Banner'),
+        SizedBox(
           height: 100,
           child: YandexAdsBannerWidget(
-            ads: widget.ads,
+            width: 320,
+            height: 100,
             id: 'R-M-DEMO-320x50',
             onAdLoaded: () {
               print('banner onAdLoaded');
             },
-            onAdFailedToLoad: (AdLoadError err) {
+            onAdFailedToLoad: (BannerError err) {
               print('banner onAdFailedToLoad code: ${err.code}, description: ${err.description}');
             },
-            onImpression: (String? data) {
-              print("banner onImpression ${data ?? ''}");
+            onImpression: (BannerImpression? data) {
+              print("banner onImpression ${data?.data}");
             },
             onAdClicked: () {
               print('banner onAdClicked');
@@ -104,29 +104,63 @@ class _BannerScreenState extends State<BannerScreen> {
   }
 }
 
-class InterstitialScreen extends StatefulWidget {
-  InterstitialScreen({Key? key, required this.ads}) : super(key: key);
+class NativeScreen extends StatefulWidget {
+  const NativeScreen({Key? key}) : super(key: key);
 
-  FlutterYandexAds ads;
+  @override
+  State<NativeScreen> createState() => _NativeScreenState();
+}
+
+class _NativeScreenState extends State<NativeScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text('Native'),
+        SizedBox(
+          height: 300,
+          child: YandexAdsNativeWidget(
+            id: 'R-M-DEMO-native-i',
+            onAdLoaded: () {
+              print('native onAdLoaded');
+            },
+            onAdFailedToLoad: (BannerError err) {
+              print('native onAdFailedToLoad code: ${err.code}, description: ${err.description}');
+            },
+            onImpression: (BannerImpression? data) {
+              print("native onImpression ${data?.data}");
+            },
+            onAdClicked: () {
+              print('native onAdClicked');
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class InterstitialScreen extends StatefulWidget {
+  const InterstitialScreen({Key? key}) : super(key: key);
 
   @override
   _InterstitialScreenState createState() => _InterstitialScreenState();
 }
 
 class _InterstitialScreenState extends State<InterstitialScreen> {
-  late YandexAdsIntersttialComponents interstitial;
+  late YandexAdsInterstitialComponent interstitial;
 
   @override
   void initState() {
     super.initState();
 
-    interstitial = YandexAdsIntersttialComponents(
+    interstitial = YandexAdsInterstitialComponent(
       id: 'R-M-338238-18',
-      ads: widget.ads,
       onAdLoaded: () {
         print('interstitial onAdLoaded');
       },
-      onAdFailedToLoad: (AdLoadError err) {
+      onAdFailedToLoad: (InterstitialError err) {
         print('interstitial onAdFailedToLoad code: ${err.code}, description: ${err.description}');
       },
       onAdDismissed: () {
@@ -135,8 +169,8 @@ class _InterstitialScreenState extends State<InterstitialScreen> {
       onAdShown: () {
         print("interstitial onAdShown");
       },
-      onImpression: (String? data) {
-        print('interstitial onImpression ${data}');
+      onImpression: (InterstitialImpression? data) {
+        print('interstitial onImpression ${data?.data}');
       },
     );
 
@@ -153,7 +187,62 @@ class _InterstitialScreenState extends State<InterstitialScreen> {
           onPressed: () {
             interstitial.show();
           },
-          child: Text('show'),
+          child: const Text('show'),
+        ),
+      ],
+    );
+  }
+}
+
+class RewardedScreen extends StatefulWidget {
+  const RewardedScreen({Key? key}) : super(key: key);
+
+  @override
+  State<RewardedScreen> createState() => _RewardedScreenState();
+}
+
+class _RewardedScreenState extends State<RewardedScreen> {
+  late YandexAdsRewardedComponent rewarded;
+
+  @override
+  void initState() {
+    super.initState();
+
+    rewarded = YandexAdsRewardedComponent(
+        id: 'R-M-DEMO-rewarded-client-side-rtb',
+        onAdLoaded: () {
+          print('rewarded onAdLoaded');
+        },
+        onAdFailedToLoad: (InterstitialError err) {
+          print('rewarded onAdFailedToLoad code: ${err.code}, description: ${err.description}');
+        },
+        onAdDismissed: () {
+          print("rewarded onAdDismissed");
+        },
+        onAdShown: () {
+          print("rewarded onAdShown");
+        },
+        onImpression: (RewardedImpression? data) {
+          print('rewarded onImpression ${data?.data}');
+        },
+        onRewarded: (RewardedEvent? data) {
+          print('rewarded onRewarded amount ${data?.amount}, type ${data?.type}');
+        });
+
+    rewarded.load();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text('Rewarded'),
+        ElevatedButton(
+          onPressed: () {
+            rewarded.show();
+          },
+          child: const Text('show'),
         ),
       ],
     );

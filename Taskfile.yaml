@@ -1,0 +1,70 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  GREETING: Hello, World!
+
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+    silent: true
+
+  yandex:
+    cmds:
+      - flutter pub run pigeon
+        --input pigeons/yandex.dart
+        --dart_out lib/pigeons/yandex.dart
+        --java_out ./android/src/main/kotlin/ru/kovardin/flutter_yandex_ads/pigeons/Yandex.java
+        --java_package "ru.kovardin.flutter_yandex_ads.pigeons"
+        --objc_header_out ./ios/Classes/pigeons/Yandex.h
+        --objc_source_out ./ios/Classes/pigeons/Yandex.m
+
+  banner:
+    cmds:
+      - flutter pub run pigeon
+        --input pigeons/banner.dart
+        --dart_out lib/pigeons/banner.dart
+        --java_out ./android/src/main/kotlin/ru/kovardin/flutter_yandex_ads/pigeons/Banner.java
+        --java_package "ru.kovardin.flutter_yandex_ads.pigeons"
+        --objc_header_out ./ios/Classes/pigeons/Banner.h
+        --objc_source_out ./ios/Classes/pigeons/Banner.m
+
+  native:
+    cmds:
+      - flutter pub run pigeon
+        --input pigeons/native.dart
+        --dart_out lib/pigeons/native.dart
+        --java_out ./android/src/main/kotlin/ru/kovardin/flutter_yandex_ads/pigeons/Native.java
+        --java_package "ru.kovardin.flutter_yandex_ads.pigeons"
+        --objc_header_out ./ios/Classes/pigeons/Native.h
+        --objc_source_out ./ios/Classes/pigeons/Native.m
+
+  interstitial:
+    cmds:
+      - flutter pub run pigeon
+        --input pigeons/interstitial.dart
+        --dart_out lib/pigeons/interstitial.dart
+        --java_out ./android/src/main/kotlin/ru/kovardin/flutter_yandex_ads/pigeons/Interstitial.java
+        --java_package "ru.kovardin.flutter_yandex_ads.pigeons"
+        --objc_header_out ./ios/Classes/pigeons/Interstitial.h
+        --objc_source_out ./ios/Classes/pigeons/Interstitial.m
+
+  rewarded:
+    cmds:
+      - flutter pub run pigeon
+        --input pigeons/rewarded.dart
+        --dart_out lib/pigeons/rewarded.dart
+        --java_out ./android/src/main/kotlin/ru/kovardin/flutter_yandex_ads/pigeons/Rewarded.java
+        --java_package "ru.kovardin.flutter_yandex_ads.pigeons"
+        --objc_header_out ./ios/Classes/pigeons/Rewarded.h
+        --objc_source_out ./ios/Classes/pigeons/Rewarded.m
+
+  pigeons:
+    cmds:
+      - task: yandex
+      - task: banner
+      - task: native
+      - task: interstitial
+      - task: rewarded

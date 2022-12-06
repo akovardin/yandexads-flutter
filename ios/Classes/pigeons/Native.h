@@ -8,10 +8,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class InterstitialError;
-@class InterstitialImpression;
+@class NativeError;
+@class NativeImpression;
 
-@interface InterstitialError : NSObject
+@interface NativeError : NSObject
 /// `init` unavailable to enforce nonnull fields, see the `make` class method.
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)makeWithCode:(NSNumber *)code
@@ -20,30 +20,27 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy) NSString * description;
 @end
 
-@interface InterstitialImpression : NSObject
+@interface NativeImpression : NSObject
 /// `init` unavailable to enforce nonnull fields, see the `make` class method.
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)makeWithData:(NSString *)data;
 @property(nonatomic, copy) NSString * data;
 @end
 
-///The codec used by YandexAdsInterstitial.
-NSObject<FlutterMessageCodec> *YandexAdsInterstitialGetCodec(void);
+///The codec used by YandexAdsNative.
+NSObject<FlutterMessageCodec> *YandexAdsNativeGetCodec(void);
 
-@protocol YandexAdsInterstitial
+@protocol YandexAdsNative
 - (void)makeId:(NSString *)id error:(FlutterError *_Nullable *_Nonnull)error;
-- (void)loadId:(NSString *)id error:(FlutterError *_Nullable *_Nonnull)error;
-- (void)showId:(NSString *)id error:(FlutterError *_Nullable *_Nonnull)error;
+- (void)loadId:(NSString *)id width:(NSNumber *)width height:(NSNumber *)height error:(FlutterError *_Nullable *_Nonnull)error;
 - (void)onAdLoadedId:(NSString *)id completion:(void(^)(FlutterError *_Nullable))completion;
-- (void)onAdFailedToLoadId:(NSString *)id completion:(void(^)(InterstitialError *_Nullable, FlutterError *_Nullable))completion;
-- (void)onAdShownId:(NSString *)id completion:(void(^)(FlutterError *_Nullable))completion;
-- (void)onAdDismissedId:(NSString *)id completion:(void(^)(FlutterError *_Nullable))completion;
+- (void)onAdFailedToLoadId:(NSString *)id completion:(void(^)(NativeError *_Nullable, FlutterError *_Nullable))completion;
 - (void)onAdClickedId:(NSString *)id completion:(void(^)(FlutterError *_Nullable))completion;
 - (void)onLeftApplicationId:(NSString *)id completion:(void(^)(FlutterError *_Nullable))completion;
 - (void)onReturnedToApplicationId:(NSString *)id completion:(void(^)(FlutterError *_Nullable))completion;
-- (void)onImpressionId:(NSString *)id completion:(void(^)(InterstitialImpression *_Nullable, FlutterError *_Nullable))completion;
+- (void)onImpressionId:(NSString *)id completion:(void(^)(NativeImpression *_Nullable, FlutterError *_Nullable))completion;
 @end
 
-extern void YandexAdsInterstitialSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<YandexAdsInterstitial> *_Nullable api);
+extern void YandexAdsNativeSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<YandexAdsNative> *_Nullable api);
 
 NS_ASSUME_NONNULL_END

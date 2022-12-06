@@ -5,55 +5,102 @@
 import Foundation
 import YandexMobileAds
 
-class YandexAdsInterstitialComponent: NSObject, YandexAdsInterstitial {
-    private var interstitial: YMAInterstitialAd? = nil
-    private var api: YandexApi
-    private var id: String!
+struct InterstitialData {
+    var ad: YMAInterstitialAd? = nil
+    var onAdLoaded: ((FlutterError?) -> Void)? = nil
+    var onAdFailed: ((InterstitialError?, FlutterError?) -> Void)? = nil
+    var onAdShownId: ((FlutterError?) -> Void)? = nil
+    var onAdDismissedId: ((FlutterError?) -> Void)? = nil
+    var onAdClickedId: ((FlutterError?) -> Void)? = nil
+    var onLeftApplicationId: ((FlutterError?) -> Void)? = nil
+    var onReturned: ((FlutterError?) -> Void)? = nil
+    var onImpressionId: ((InterstitialImpression?, FlutterError?) -> Void)? = nil
+}
 
-    init(api: YandexApi) {
-        self.api = api
-        super.init()
+class YandexAdsInterstitialComponent: NSObject, YandexAdsInterstitial {
+    private var interstitials: [String: InterstitialData] = [:]
+    
+    
+    func makeId(_ id: String, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+        let interstitial = YMAInterstitialAd(adUnitID: id)
+        interstitial.delegate = self;
+        
+        interstitials[id] = InterstitialData(ad: interstitial)
     }
+    
 
     func loadId(_ id: String, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        self.id = id
-
-        interstitial = YMAInterstitialAd(adUnitID: id)
-        interstitial?.delegate = self;
-        interstitial?.load()
+        interstitials[id]?.ad?.load()
     }
-
-    func showWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        if let controller = UIApplication.shared.delegate?.window??.rootViewController as? FlutterViewController, let interstitial = interstitial {
-            interstitial.present(from: controller)
+    
+    func showId(_ id: String, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+        if let controller = UIApplication.shared.delegate?.window??.rootViewController as? FlutterViewController {
+            interstitials[id]?.ad?.present(from: controller)
         }
+    }
+   
+
+    func onAdLoadedId(_ id: String, completion: @escaping (FlutterError?) -> Void){
+        interstitials[id]?.onAdLoaded = completion
+    }
+    
+    
+    func onAdFailed(toLoadId id: String, completion: @escaping (InterstitialError?, FlutterError?) -> Void) {
+        interstitials[id]?.onAdFailed = completion
+    }
+    
+    
+    func onAdShownId(_ id: String, completion: @escaping (FlutterError?) -> Void) {
+        interstitials[id]?.onAdShownId = completion
+    }
+    
+    
+    func onAdDismissedId(_ id: String, completion: @escaping (FlutterError?) -> Void) {
+        interstitials[id]?.onAdDismissedId = completion
+    }
+    
+    func onAdClickedId(_ id: String, completion: @escaping (FlutterError?) -> Void) {
+        interstitials[id]?.onAdClickedId = completion
+    }
+    
+    
+    func onLeftApplicationId(_ id: String, completion: @escaping (FlutterError?) -> Void) {
+        interstitials[id]?.onLeftApplicationId = completion
+    }
+    
+    
+    func onReturned(toApplicationId id: String, completion: @escaping (FlutterError?) -> Void) {
+        interstitials[id]?.onReturned = completion
+    }
+    
+    
+    func onImpressionId(_ id: String, completion: @escaping (InterstitialImpression?, FlutterError?) -> Void) {
+        interstitials[id]?.onImpressionId = completion
     }
 }
 
 
 extension YandexAdsInterstitialComponent: YMAInterstitialAdDelegate {
-    func interstitialAdDidLoad(_ interstitialAd: YMAInterstitialAd) {
-        let response = EventResponse()
 
-        if let callback = api.callbacks[EventKey(id: id, name: "onAdLoaded", type: EventType.INTERSTITIAL.rawValue)] {
-            callback(response, nil)
+    func interstitialAdDidLoad(_ interstitialAd: YMAInterstitialAd) {
+        if let callback = interstitials[interstitialAd.adUnitID]?.onAdLoaded {
+            callback(nil)
         }
     }
 
     func interstitialAdDidFail(toLoad interstitialAd: YMAInterstitialAd, error: Error) {
-        let response = EventResponse()
-        response.code = error._code as NSNumber
+        let response = InterstitialError.make(
+            withCode: error._code as NSNumber,
+            description: error.localizedDescription)
 
-        if let callback = api.callbacks[EventKey(id: id, name: "onAdFailedToLoad", type: EventType.INTERSTITIAL.rawValue)] {
+        if let callback = interstitials[interstitialAd.adUnitID]?.onAdFailed {
             callback(response, nil)
         }
     }
 
     func interstitialAdWillLeaveApplication(_ interstitialAd: YMAInterstitialAd) {
-        let response = EventResponse()
-
-        if let callback = api.callbacks[EventKey(id: id, name: "onLeftApplication", type: EventType.INTERSTITIAL.rawValue)] {
-            callback(response, nil)
+        if let callback = interstitials[interstitialAd.adUnitID]?.onLeftApplicationId {
+            callback(nil)
         }
     }
 
@@ -66,11 +113,7 @@ extension YandexAdsInterstitialComponent: YMAInterstitialAdDelegate {
     }
 
     func interstitialAdDidAppear(_ interstitialAd: YMAInterstitialAd) {
-        let response = EventResponse()
-
-        if let callback = api.callbacks[EventKey(id: id, name: "onAdShown", type: EventType.INTERSTITIAL.rawValue)] {
-            callback(response, nil)
-        }
+        print("Interstitial ad did appear")
     }
 
     func interstitialAdWillDisappear(_ interstitialAd: YMAInterstitialAd) {
@@ -78,25 +121,28 @@ extension YandexAdsInterstitialComponent: YMAInterstitialAdDelegate {
     }
 
     func interstitialAdDidDisappear(_ interstitialAd: YMAInterstitialAd) {
-        let response = EventResponse()
-
-        if let callback = api.callbacks[EventKey(id: id, name: "onAdDismissed", type: EventType.INTERSTITIAL.rawValue)] {
-            callback(response, nil)
+        if let callback = interstitials[interstitialAd.adUnitID]?.onAdDismissedId {
+            callback(nil)
         }
     }
 
     func interstitialAd(_ interstitialAd: YMAInterstitialAd, willPresentScreen webBrowser: UIViewController?) {
-        print("Interstitial ad will present screen")
+        if let callback = interstitials[interstitialAd.adUnitID]?.onAdShownId {
+            callback(nil)
+        }
     }
 
     func interstitialAd(_ interstitialAd: YMAInterstitialAd, didTrackImpressionWith impressionData: YMAImpressionData?) {
-        print("Interstitial ad did track impression data")
-
-        let response = EventResponse()
-        response.data = impressionData?.rawData ?? ""
-
-        if let callback = api.callbacks[EventKey(id: id, name: "onImpression", type: EventType.INTERSTITIAL.rawValue)] {
+        let response = InterstitialImpression.make(withData: impressionData?.rawData ?? "")
+        
+        if let callback = interstitials[interstitialAd.adUnitID]?.onImpressionId {
             callback(response, nil)
+        }
+    }
+    
+    func interstitialAdDidClick(_ interstitialAd: YMAInterstitialAd) {
+        if let callback = interstitials[interstitialAd.adUnitID]?.onAdClickedId {
+            callback(nil)
         }
     }
 }

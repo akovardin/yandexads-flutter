@@ -1,33 +1,25 @@
 import 'package:pigeon/pigeon.dart';
 
-class InterstitialError {
+class NativeError {
   late int code;
   late String description;
 }
 
-class InterstitialImpression {
+class NativeImpression {
   late String data;
 }
 
 @HostApi()
-abstract class YandexAdsInterstitial {
+abstract class YandexAdsNative {
   void make(String id);
 
-  void load(String id);
-
-  void show(String id);
+  void load(String id, int width, int height);
 
   @async
   void onAdLoaded(String id);
 
   @async
-  InterstitialError onAdFailedToLoad(String id);
-
-  @async
-  void onAdShown(String id);
-
-  @async
-  void onAdDismissed(String id);
+  NativeError onAdFailedToLoad(String id);
 
   @async
   void onAdClicked(String id);
@@ -39,5 +31,5 @@ abstract class YandexAdsInterstitial {
   void onReturnedToApplication(String id);
 
   @async
-  InterstitialImpression onImpression(String id);
+  NativeImpression onImpression(String id);
 }

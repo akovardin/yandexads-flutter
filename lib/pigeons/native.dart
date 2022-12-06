@@ -7,8 +7,8 @@ import 'dart:typed_data' show Float64List, Int32List, Int64List, Uint8List;
 import 'package:flutter/foundation.dart' show ReadBuffer, WriteBuffer;
 import 'package:flutter/services.dart';
 
-class InterstitialError {
-  InterstitialError({
+class NativeError {
+  NativeError({
     required this.code,
     required this.description,
   });
@@ -23,17 +23,17 @@ class InterstitialError {
     return pigeonMap;
   }
 
-  static InterstitialError decode(Object message) {
+  static NativeError decode(Object message) {
     final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
-    return InterstitialError(
+    return NativeError(
       code: pigeonMap['code']! as int,
       description: pigeonMap['description']! as String,
     );
   }
 }
 
-class InterstitialImpression {
-  InterstitialImpression({
+class NativeImpression {
+  NativeImpression({
     required this.data,
   });
 
@@ -45,23 +45,23 @@ class InterstitialImpression {
     return pigeonMap;
   }
 
-  static InterstitialImpression decode(Object message) {
+  static NativeImpression decode(Object message) {
     final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
-    return InterstitialImpression(
+    return NativeImpression(
       data: pigeonMap['data']! as String,
     );
   }
 }
 
-class _YandexAdsInterstitialCodec extends StandardMessageCodec {
-  const _YandexAdsInterstitialCodec();
+class _YandexAdsNativeCodec extends StandardMessageCodec {
+  const _YandexAdsNativeCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
-    if (value is InterstitialError) {
+    if (value is NativeError) {
       buffer.putUint8(128);
       writeValue(buffer, value.encode());
     } else 
-    if (value is InterstitialImpression) {
+    if (value is NativeImpression) {
       buffer.putUint8(129);
       writeValue(buffer, value.encode());
     } else 
@@ -73,10 +73,10 @@ class _YandexAdsInterstitialCodec extends StandardMessageCodec {
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case 128:       
-        return InterstitialError.decode(readValue(buffer)!);
+        return NativeError.decode(readValue(buffer)!);
       
       case 129:       
-        return InterstitialImpression.decode(readValue(buffer)!);
+        return NativeImpression.decode(readValue(buffer)!);
       
       default:      
         return super.readValueOfType(type, buffer);
@@ -85,19 +85,19 @@ class _YandexAdsInterstitialCodec extends StandardMessageCodec {
   }
 }
 
-class YandexAdsInterstitial {
-  /// Constructor for [YandexAdsInterstitial].  The [binaryMessenger] named argument is
+class YandexAdsNative {
+  /// Constructor for [YandexAdsNative].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  YandexAdsInterstitial({BinaryMessenger? binaryMessenger}) : _binaryMessenger = binaryMessenger;
+  YandexAdsNative({BinaryMessenger? binaryMessenger}) : _binaryMessenger = binaryMessenger;
 
   final BinaryMessenger? _binaryMessenger;
 
-  static const MessageCodec<Object?> codec = _YandexAdsInterstitialCodec();
+  static const MessageCodec<Object?> codec = _YandexAdsNativeCodec();
 
   Future<void> make(String arg_id) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.YandexAdsInterstitial.make', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.YandexAdsNative.make', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(<Object?>[arg_id]) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -117,33 +117,11 @@ class YandexAdsInterstitial {
     }
   }
 
-  Future<void> load(String arg_id) async {
+  Future<void> load(String arg_id, int arg_width, int arg_height) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.YandexAdsInterstitial.load', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.YandexAdsNative.load', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_id]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
-      throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
-      throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<void> show(String arg_id) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.YandexAdsInterstitial.show', codec, binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_id]) as Map<Object?, Object?>?;
+        await channel.send(<Object?>[arg_id, arg_width, arg_height]) as Map<Object?, Object?>?;
     if (replyMap == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -163,7 +141,7 @@ class YandexAdsInterstitial {
 
   Future<void> onAdLoaded(String arg_id) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.YandexAdsInterstitial.onAdLoaded', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.YandexAdsNative.onAdLoaded', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(<Object?>[arg_id]) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -183,9 +161,9 @@ class YandexAdsInterstitial {
     }
   }
 
-  Future<InterstitialError> onAdFailedToLoad(String arg_id) async {
+  Future<NativeError> onAdFailedToLoad(String arg_id) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.YandexAdsInterstitial.onAdFailedToLoad', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.YandexAdsNative.onAdFailedToLoad', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(<Object?>[arg_id]) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -206,57 +184,13 @@ class YandexAdsInterstitial {
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as InterstitialError?)!;
-    }
-  }
-
-  Future<void> onAdShown(String arg_id) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.YandexAdsInterstitial.onAdShown', codec, binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_id]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
-      throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
-      throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<void> onAdDismissed(String arg_id) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.YandexAdsInterstitial.onAdDismissed', codec, binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_id]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
-      throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
-      throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
-      );
-    } else {
-      return;
+      return (replyMap['result'] as NativeError?)!;
     }
   }
 
   Future<void> onAdClicked(String arg_id) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.YandexAdsInterstitial.onAdClicked', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.YandexAdsNative.onAdClicked', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(<Object?>[arg_id]) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -278,7 +212,7 @@ class YandexAdsInterstitial {
 
   Future<void> onLeftApplication(String arg_id) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.YandexAdsInterstitial.onLeftApplication', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.YandexAdsNative.onLeftApplication', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(<Object?>[arg_id]) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -300,7 +234,7 @@ class YandexAdsInterstitial {
 
   Future<void> onReturnedToApplication(String arg_id) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.YandexAdsInterstitial.onReturnedToApplication', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.YandexAdsNative.onReturnedToApplication', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(<Object?>[arg_id]) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -320,9 +254,9 @@ class YandexAdsInterstitial {
     }
   }
 
-  Future<InterstitialImpression> onImpression(String arg_id) async {
+  Future<NativeImpression> onImpression(String arg_id) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.YandexAdsInterstitial.onImpression', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.YandexAdsNative.onImpression', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(<Object?>[arg_id]) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -343,7 +277,7 @@ class YandexAdsInterstitial {
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as InterstitialImpression?)!;
+      return (replyMap['result'] as NativeImpression?)!;
     }
   }
 }

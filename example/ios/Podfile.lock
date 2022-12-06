@@ -159,7 +159,7 @@ SPEC CHECKSUMS:
   AppLovinSDK: 347d9d039d499acbc3c3f616c669d010b2269334
   AppLovinYandexMobileAdsAdapters: 184f630c6b3a938214a11a573fc671d70e5e7167
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  flutter_yandex_ads: cd539ac263ca33e33b2c1167fe5933904208dbfb
+  flutter_yandex_ads: 238fca373e2a0c621159dd1f27725dfd6357bd26
   Google-Mobile-Ads-SDK: 8822993da940ab920bad131b5bffce7eb3f62c6a
   GoogleAppMeasurement: 6de2b1a69e4326eb82ee05d138f6a5cb7311bcb1
   GoogleUserMessagingPlatform: 5f8b30daf181805317b6b985bb51c1ff3beca054

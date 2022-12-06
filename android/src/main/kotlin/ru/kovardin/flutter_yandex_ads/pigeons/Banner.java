@@ -20,10 +20,10 @@ import java.util.HashMap;
 
 /**Generated class from Pigeon. */
 @SuppressWarnings({"unused", "unchecked", "CodeBlock2Expr", "RedundantSuppression"})
-public class Interstitial {
+public class Banner {
 
   /** Generated class from Pigeon that represents data sent in messages. */
-  public static class InterstitialError {
+  public static class BannerError {
     private @NonNull Long code;
     public @NonNull Long getCode() { return code; }
     public void setCode(@NonNull Long setterArg) {
@@ -43,7 +43,7 @@ public class Interstitial {
     }
 
     /**Constructor is private to enforce null safety; use Builder. */
-    private InterstitialError() {}
+    private BannerError() {}
     public static final class Builder {
       private @Nullable Long code;
       public @NonNull Builder setCode(@NonNull Long setterArg) {
@@ -55,8 +55,8 @@ public class Interstitial {
         this.description = setterArg;
         return this;
       }
-      public @NonNull InterstitialError build() {
-        InterstitialError pigeonReturn = new InterstitialError();
+      public @NonNull BannerError build() {
+        BannerError pigeonReturn = new BannerError();
         pigeonReturn.setCode(code);
         pigeonReturn.setDescription(description);
         return pigeonReturn;
@@ -68,8 +68,8 @@ public class Interstitial {
       toMapResult.put("description", description);
       return toMapResult;
     }
-    static @NonNull InterstitialError fromMap(@NonNull Map<String, Object> map) {
-      InterstitialError pigeonResult = new InterstitialError();
+    static @NonNull BannerError fromMap(@NonNull Map<String, Object> map) {
+      BannerError pigeonResult = new BannerError();
       Object code = map.get("code");
       pigeonResult.setCode((code == null) ? null : ((code instanceof Integer) ? (Integer)code : (Long)code));
       Object description = map.get("description");
@@ -79,7 +79,7 @@ public class Interstitial {
   }
 
   /** Generated class from Pigeon that represents data sent in messages. */
-  public static class InterstitialImpression {
+  public static class BannerImpression {
     private @NonNull String data;
     public @NonNull String getData() { return data; }
     public void setData(@NonNull String setterArg) {
@@ -90,15 +90,15 @@ public class Interstitial {
     }
 
     /**Constructor is private to enforce null safety; use Builder. */
-    private InterstitialImpression() {}
+    private BannerImpression() {}
     public static final class Builder {
       private @Nullable String data;
       public @NonNull Builder setData(@NonNull String setterArg) {
         this.data = setterArg;
         return this;
       }
-      public @NonNull InterstitialImpression build() {
-        InterstitialImpression pigeonReturn = new InterstitialImpression();
+      public @NonNull BannerImpression build() {
+        BannerImpression pigeonReturn = new BannerImpression();
         pigeonReturn.setData(data);
         return pigeonReturn;
       }
@@ -108,8 +108,8 @@ public class Interstitial {
       toMapResult.put("data", data);
       return toMapResult;
     }
-    static @NonNull InterstitialImpression fromMap(@NonNull Map<String, Object> map) {
-      InterstitialImpression pigeonResult = new InterstitialImpression();
+    static @NonNull BannerImpression fromMap(@NonNull Map<String, Object> map) {
+      BannerImpression pigeonResult = new BannerImpression();
       Object data = map.get("data");
       pigeonResult.setData((String)data);
       return pigeonResult;
@@ -120,17 +120,17 @@ public class Interstitial {
     void success(T result);
     void error(Throwable error);
   }
-  private static class YandexAdsInterstitialCodec extends StandardMessageCodec {
-    public static final YandexAdsInterstitialCodec INSTANCE = new YandexAdsInterstitialCodec();
-    private YandexAdsInterstitialCodec() {}
+  private static class YandexAdsBannerCodec extends StandardMessageCodec {
+    public static final YandexAdsBannerCodec INSTANCE = new YandexAdsBannerCodec();
+    private YandexAdsBannerCodec() {}
     @Override
     protected Object readValueOfType(byte type, ByteBuffer buffer) {
       switch (type) {
         case (byte)128:         
-          return InterstitialError.fromMap((Map<String, Object>) readValue(buffer));
+          return BannerError.fromMap((Map<String, Object>) readValue(buffer));
         
         case (byte)129:         
-          return InterstitialImpression.fromMap((Map<String, Object>) readValue(buffer));
+          return BannerImpression.fromMap((Map<String, Object>) readValue(buffer));
         
         default:        
           return super.readValueOfType(type, buffer);
@@ -139,13 +139,13 @@ public class Interstitial {
     }
     @Override
     protected void writeValue(ByteArrayOutputStream stream, Object value)     {
-      if (value instanceof InterstitialError) {
+      if (value instanceof BannerError) {
         stream.write(128);
-        writeValue(stream, ((InterstitialError) value).toMap());
+        writeValue(stream, ((BannerError) value).toMap());
       } else 
-      if (value instanceof InterstitialImpression) {
+      if (value instanceof BannerImpression) {
         stream.write(129);
-        writeValue(stream, ((InterstitialImpression) value).toMap());
+        writeValue(stream, ((BannerImpression) value).toMap());
       } else 
 {
         super.writeValue(stream, value);
@@ -154,29 +154,26 @@ public class Interstitial {
   }
 
   /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
-  public interface YandexAdsInterstitial {
-    void make(@NonNull String id);
+  public interface YandexAdsBanner {
+    void make(@NonNull String id, @NonNull Long width, @NonNull Long height);
     void load(@NonNull String id);
-    void show(@NonNull String id);
     void onAdLoaded(@NonNull String id, Result<Void> result);
-    void onAdFailedToLoad(@NonNull String id, Result<InterstitialError> result);
-    void onAdShown(@NonNull String id, Result<Void> result);
-    void onAdDismissed(@NonNull String id, Result<Void> result);
+    void onAdFailedToLoad(@NonNull String id, Result<BannerError> result);
     void onAdClicked(@NonNull String id, Result<Void> result);
     void onLeftApplication(@NonNull String id, Result<Void> result);
     void onReturnedToApplication(@NonNull String id, Result<Void> result);
-    void onImpression(@NonNull String id, Result<InterstitialImpression> result);
+    void onImpression(@NonNull String id, Result<BannerImpression> result);
 
-    /** The codec used by YandexAdsInterstitial. */
+    /** The codec used by YandexAdsBanner. */
     static MessageCodec<Object> getCodec() {
-      return YandexAdsInterstitialCodec.INSTANCE;
+      return YandexAdsBannerCodec.INSTANCE;
     }
 
-    /**Sets up an instance of `YandexAdsInterstitial` to handle messages through the `binaryMessenger`. */
-    static void setup(BinaryMessenger binaryMessenger, YandexAdsInterstitial api) {
+    /**Sets up an instance of `YandexAdsBanner` to handle messages through the `binaryMessenger`. */
+    static void setup(BinaryMessenger binaryMessenger, YandexAdsBanner api) {
       {
         BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.YandexAdsInterstitial.make", getCodec());
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.YandexAdsBanner.make", getCodec());
         if (api != null) {
           channel.setMessageHandler((message, reply) -> {
             Map<String, Object> wrapped = new HashMap<>();
@@ -186,7 +183,15 @@ public class Interstitial {
               if (idArg == null) {
                 throw new NullPointerException("idArg unexpectedly null.");
               }
-              api.make(idArg);
+              Number widthArg = (Number)args.get(1);
+              if (widthArg == null) {
+                throw new NullPointerException("widthArg unexpectedly null.");
+              }
+              Number heightArg = (Number)args.get(2);
+              if (heightArg == null) {
+                throw new NullPointerException("heightArg unexpectedly null.");
+              }
+              api.make(idArg, (widthArg == null) ? null : widthArg.longValue(), (heightArg == null) ? null : heightArg.longValue());
               wrapped.put("result", null);
             }
             catch (Error | RuntimeException exception) {
@@ -200,7 +205,7 @@ public class Interstitial {
       }
       {
         BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.YandexAdsInterstitial.load", getCodec());
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.YandexAdsBanner.load", getCodec());
         if (api != null) {
           channel.setMessageHandler((message, reply) -> {
             Map<String, Object> wrapped = new HashMap<>();
@@ -224,31 +229,7 @@ public class Interstitial {
       }
       {
         BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.YandexAdsInterstitial.show", getCodec());
-        if (api != null) {
-          channel.setMessageHandler((message, reply) -> {
-            Map<String, Object> wrapped = new HashMap<>();
-            try {
-              ArrayList<Object> args = (ArrayList<Object>)message;
-              String idArg = (String)args.get(0);
-              if (idArg == null) {
-                throw new NullPointerException("idArg unexpectedly null.");
-              }
-              api.show(idArg);
-              wrapped.put("result", null);
-            }
-            catch (Error | RuntimeException exception) {
-              wrapped.put("error", wrapError(exception));
-            }
-            reply.reply(wrapped);
-          });
-        } else {
-          channel.setMessageHandler(null);
-        }
-      }
-      {
-        BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.YandexAdsInterstitial.onAdLoaded", getCodec());
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.YandexAdsBanner.onAdLoaded", getCodec());
         if (api != null) {
           channel.setMessageHandler((message, reply) -> {
             Map<String, Object> wrapped = new HashMap<>();
@@ -282,7 +263,7 @@ public class Interstitial {
       }
       {
         BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.YandexAdsInterstitial.onAdFailedToLoad", getCodec());
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.YandexAdsBanner.onAdFailedToLoad", getCodec());
         if (api != null) {
           channel.setMessageHandler((message, reply) -> {
             Map<String, Object> wrapped = new HashMap<>();
@@ -292,8 +273,8 @@ public class Interstitial {
               if (idArg == null) {
                 throw new NullPointerException("idArg unexpectedly null.");
               }
-              Result<InterstitialError> resultCallback = new Result<InterstitialError>() {
-                public void success(InterstitialError result) {
+              Result<BannerError> resultCallback = new Result<BannerError>() {
+                public void success(BannerError result) {
                   wrapped.put("result", result);
                   reply.reply(wrapped);
                 }
@@ -316,75 +297,7 @@ public class Interstitial {
       }
       {
         BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.YandexAdsInterstitial.onAdShown", getCodec());
-        if (api != null) {
-          channel.setMessageHandler((message, reply) -> {
-            Map<String, Object> wrapped = new HashMap<>();
-            try {
-              ArrayList<Object> args = (ArrayList<Object>)message;
-              String idArg = (String)args.get(0);
-              if (idArg == null) {
-                throw new NullPointerException("idArg unexpectedly null.");
-              }
-              Result<Void> resultCallback = new Result<Void>() {
-                public void success(Void result) {
-                  wrapped.put("result", null);
-                  reply.reply(wrapped);
-                }
-                public void error(Throwable error) {
-                  wrapped.put("error", wrapError(error));
-                  reply.reply(wrapped);
-                }
-              };
-
-              api.onAdShown(idArg, resultCallback);
-            }
-            catch (Error | RuntimeException exception) {
-              wrapped.put("error", wrapError(exception));
-              reply.reply(wrapped);
-            }
-          });
-        } else {
-          channel.setMessageHandler(null);
-        }
-      }
-      {
-        BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.YandexAdsInterstitial.onAdDismissed", getCodec());
-        if (api != null) {
-          channel.setMessageHandler((message, reply) -> {
-            Map<String, Object> wrapped = new HashMap<>();
-            try {
-              ArrayList<Object> args = (ArrayList<Object>)message;
-              String idArg = (String)args.get(0);
-              if (idArg == null) {
-                throw new NullPointerException("idArg unexpectedly null.");
-              }
-              Result<Void> resultCallback = new Result<Void>() {
-                public void success(Void result) {
-                  wrapped.put("result", null);
-                  reply.reply(wrapped);
-                }
-                public void error(Throwable error) {
-                  wrapped.put("error", wrapError(error));
-                  reply.reply(wrapped);
-                }
-              };
-
-              api.onAdDismissed(idArg, resultCallback);
-            }
-            catch (Error | RuntimeException exception) {
-              wrapped.put("error", wrapError(exception));
-              reply.reply(wrapped);
-            }
-          });
-        } else {
-          channel.setMessageHandler(null);
-        }
-      }
-      {
-        BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.YandexAdsInterstitial.onAdClicked", getCodec());
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.YandexAdsBanner.onAdClicked", getCodec());
         if (api != null) {
           channel.setMessageHandler((message, reply) -> {
             Map<String, Object> wrapped = new HashMap<>();
@@ -418,7 +331,7 @@ public class Interstitial {
       }
       {
         BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.YandexAdsInterstitial.onLeftApplication", getCodec());
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.YandexAdsBanner.onLeftApplication", getCodec());
         if (api != null) {
           channel.setMessageHandler((message, reply) -> {
             Map<String, Object> wrapped = new HashMap<>();
@@ -452,7 +365,7 @@ public class Interstitial {
       }
       {
         BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.YandexAdsInterstitial.onReturnedToApplication", getCodec());
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.YandexAdsBanner.onReturnedToApplication", getCodec());
         if (api != null) {
           channel.setMessageHandler((message, reply) -> {
             Map<String, Object> wrapped = new HashMap<>();
@@ -486,7 +399,7 @@ public class Interstitial {
       }
       {
         BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.YandexAdsInterstitial.onImpression", getCodec());
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.YandexAdsBanner.onImpression", getCodec());
         if (api != null) {
           channel.setMessageHandler((message, reply) -> {
             Map<String, Object> wrapped = new HashMap<>();
@@ -496,8 +409,8 @@ public class Interstitial {
               if (idArg == null) {
                 throw new NullPointerException("idArg unexpectedly null.");
               }
-              Result<InterstitialImpression> resultCallback = new Result<InterstitialImpression>() {
-                public void success(InterstitialImpression result) {
+              Result<BannerImpression> resultCallback = new Result<BannerImpression>() {
+                public void success(BannerImpression result) {
                   wrapped.put("result", result);
                   reply.reply(wrapped);
                 }
