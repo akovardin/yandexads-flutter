@@ -1,3 +1,11 @@
+## 1.0.2
+
+* Fixed small android bugs
+
+## 1.0.1
+
+ * Upgrade android to 5.10.0
+
 ## 1.0.0
 
 * Changed package initialization method

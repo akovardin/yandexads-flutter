@@ -27,7 +27,7 @@ class YandexAdsBanner(private val context: Context): Banner.YandexAdsBanner {
     override fun make(id: String, width: Long, height: Long) {
         val banner = BannerData(view = BannerAdView(context))
 
-        banner.view.setAdSize(AdSize.flexibleSize(width.toInt(), height.toInt()))
+        banner.view.setAdSize(AdSize.stickySize(context, width.toInt()))
         banner.view.setAdUnitId(id)
         banner.view.setBannerAdEventListener(object : BannerAdEventListener {
             override fun onAdLoaded() {

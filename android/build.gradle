@@ -2,14 +2,14 @@ group 'ru.kovardin.flutter_yandex_ads'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.6.10'
+    ext.kotlin_version = '1.7.10'
     repositories {
         google()
         mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath 'com.android.tools.build:gradle:7.3.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -21,12 +21,12 @@ rootProject.allprojects {
 
         // IronSource
         maven {
-            url 'https://android-sdk.is.com/'
+            url "https://android-sdk.is.com/"
         }
 
         // Pangle
         maven {
-            url 'https://artifact.bytedance.com/repository/pangle'
+            url "https://artifact.bytedance.com/repository/pangle"
         }
 
         // Tapjoy
@@ -61,13 +61,13 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 21
     }
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation 'com.yandex.android:mobileads:5.4.0'
-    implementation 'com.yandex.android:mobileads-mediation:5.4.0.0'
+    implementation 'com.yandex.android:mobileads:5.10.0'
+    implementation 'com.yandex.android:mobileads-mediation:5.10.0.0'
 }
