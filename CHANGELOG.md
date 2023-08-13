@@ -1,3 +1,7 @@
+## 1.0.3
+
+* Fixed errors with callbacks
+
 ## 1.0.2
 
 * Fixed small android bugs

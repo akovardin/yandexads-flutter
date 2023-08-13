@@ -16,44 +16,32 @@ class YandexAdsBannerWidget extends StatelessWidget {
     required this.width,
     required this.height,
   }) : super(key: key) {
-    var banner = YandexAdsBanner();
+    banner = YandexAdsBanner();
 
     banner.make(id, width, height);
 
     if (onAdLoaded != null) {
-      banner.onAdLoaded(id).then((value) {
-        onAdLoaded();
-      });
+      _onAdLoaded(id, onAdLoaded);
     }
 
     if (onAdFailedToLoad != null) {
-      banner.onAdFailedToLoad(id).then((value) {
-        onAdFailedToLoad(value);
-      });
+      _onAdFailedToLoad(id, onAdFailedToLoad);
     }
 
     if (onImpression != null) {
-      banner.onImpression(id).then((value) {
-        onImpression(value);
-      });
+      _onImpression(id, onImpression);
     }
 
     if (onAdClicked != null) {
-      banner.onAdClicked(id).then((value) {
-        onAdClicked();
-      });
+      _onAdClicked(id, onAdClicked);
     }
 
     if (onLeftApplication != null) {
-      banner.onLeftApplication(id).then((value) {
-        onLeftApplication();
-      });
+      _onLeftApplication(id, onLeftApplication);
     }
 
     if (onReturnedToApplication != null) {
-      banner.onReturnedToApplication(id).then((value) {
-        onReturnedToApplication();
-      });
+      _onReturnedToApplication(id, onReturnedToApplication);
     }
 
     banner.load(id);
@@ -62,6 +50,55 @@ class YandexAdsBannerWidget extends StatelessWidget {
   final String id;
   final int width;
   final int height;
+  late YandexAdsBanner banner;
+
+  void _onAdLoaded(String id, Function callback) {
+    banner.onAdLoaded(id).then((value) {
+      _onAdLoaded(id, callback);
+
+      callback();
+    });
+  }
+
+  void _onAdFailedToLoad(String id, Function callback) {
+    banner.onAdFailedToLoad(id).then((value) {
+      _onAdFailedToLoad(id, callback);
+
+      callback(value);
+    });
+  }
+
+  void _onImpression(String id, Function callback) {
+    banner.onImpression(id).then((value) {
+      _onImpression(id, callback);
+
+      callback(value);
+    });
+  }
+
+  void _onAdClicked(String id, Function callback) {
+    banner.onAdClicked(id).then((value) {
+      _onAdClicked(id, callback);
+
+      callback();
+    });
+  }
+
+  void _onLeftApplication(String id, Function callback) {
+    banner.onLeftApplication(id).then((value) {
+      _onLeftApplication(id, callback);
+
+      callback();
+    });
+  }
+
+  void _onReturnedToApplication(String id, Function callback) {
+    banner.onReturnedToApplication(id).then((value) {
+      _onReturnedToApplication(id, callback);
+
+      callback();
+    });
+  }
 
   Widget build(BuildContext context) {
     const String viewType = 'yandex-ads-banner';

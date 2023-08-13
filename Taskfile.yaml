@@ -68,3 +68,8 @@ tasks:
       - task: native
       - task: interstitial
       - task: rewarded
+
+  release:
+    cmds:
+      - flutter pub publish
+
