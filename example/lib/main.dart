@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_yandex_ads/components/banner.dart';
 import 'package:flutter_yandex_ads/components/interstitial.dart';
 import 'package:flutter_yandex_ads/components/rewarded.dart';
 import 'package:flutter_yandex_ads/pigeons/banner.dart';
@@ -68,9 +69,31 @@ class BannerScreen extends StatefulWidget {
 }
 
 class _BannerScreenState extends State<BannerScreen> {
+  late YandexAdsBannerComponent banner;
+
   @override
   void initState() {
     super.initState();
+
+    banner = YandexAdsBannerComponent(
+      width: 320,
+      height: 100,
+      id: 'R-M-DEMO-320x50',
+      onAdLoaded: () {
+        print('banner onAdLoaded');
+      },
+      onAdFailedToLoad: (BannerError err) {
+        print('banner onAdFailedToLoad code: ${err.code}, description: ${err.description}');
+      },
+      onImpression: (BannerImpression? data) {
+        print("banner onImpression ${data?.data}");
+      },
+      onAdClicked: () {
+        print('banner onAdClicked');
+      },
+    );
+
+    banner.load();
   }
 
   @override
@@ -82,21 +105,7 @@ class _BannerScreenState extends State<BannerScreen> {
         SizedBox(
           height: 100,
           child: YandexAdsBannerWidget(
-            width: 320,
-            height: 100,
-            id: 'R-M-DEMO-320x50',
-            onAdLoaded: () {
-              print('banner onAdLoaded');
-            },
-            onAdFailedToLoad: (BannerError err) {
-              print('banner onAdFailedToLoad code: ${err.code}, description: ${err.description}');
-            },
-            onImpression: (BannerImpression? data) {
-              print("banner onImpression ${data?.data}");
-            },
-            onAdClicked: () {
-              print('banner onAdClicked');
-            },
+            banner: banner,
           ),
         ),
       ],

@@ -122,12 +122,10 @@ FlutterYandexAds.initialize();
 
 ### Banner
 
-Create banner widget:
+Create banner:
 
 ```
-Container(
-  height: 100,
-  child: YandexAdsBannerWidget(
+var banner = YandexAdsBannerComponent(
     width: 320,
     height: 100,
     id: 'R-M-DEMO-320x50',
@@ -143,6 +141,19 @@ Container(
     onAdClicked: () {
       print('banner onAdClicked');
     },
+  ),
+);
+
+banner.load();
+```
+
+Create banner widget:
+
+```
+Container(
+  height: 100,
+  child: YandexAdsBannerWidget(
+    banner: banner,
   ),
 )
 ```

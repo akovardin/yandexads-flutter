@@ -1,3 +1,7 @@
+## 1.0.4
+
+* Reformat banner logic
+
 ## 1.0.3
 
 * Fixed errors with callbacks
