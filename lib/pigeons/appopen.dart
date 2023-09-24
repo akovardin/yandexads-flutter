@@ -8,8 +8,8 @@ import 'dart:typed_data' show Float64List, Int32List, Int64List, Uint8List;
 import 'package:flutter/foundation.dart' show ReadBuffer, WriteBuffer;
 import 'package:flutter/services.dart';
 
-class InterstitialError {
-  InterstitialError({
+class AppOpenError {
+  AppOpenError({
     required this.code,
     required this.description,
   });
@@ -25,17 +25,17 @@ class InterstitialError {
     ];
   }
 
-  static InterstitialError decode(Object result) {
+  static AppOpenError decode(Object result) {
     result as List<Object?>;
-    return InterstitialError(
+    return AppOpenError(
       code: result[0]! as int,
       description: result[1]! as String,
     );
   }
 }
 
-class InterstitialImpression {
-  InterstitialImpression({
+class AppOpenImpression {
+  AppOpenImpression({
     required this.data,
   });
 
@@ -47,19 +47,19 @@ class InterstitialImpression {
     ];
   }
 
-  static InterstitialImpression decode(Object result) {
+  static AppOpenImpression decode(Object result) {
     result as List<Object?>;
-    return InterstitialImpression(
+    return AppOpenImpression(
       data: result[0]! as String,
     );
   }
 }
 
-class YandexAdsInterstitial {
-  /// Constructor for [YandexAdsInterstitial].  The [binaryMessenger] named argument is
+class YandexAdsAppOpen {
+  /// Constructor for [YandexAdsAppOpen].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  YandexAdsInterstitial({BinaryMessenger? binaryMessenger})
+  YandexAdsAppOpen({BinaryMessenger? binaryMessenger})
       : _binaryMessenger = binaryMessenger;
   final BinaryMessenger? _binaryMessenger;
 
@@ -67,51 +67,7 @@ class YandexAdsInterstitial {
 
   Future<void> make(String arg_id) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.flutter_yandex_ads.YandexAdsInterstitial.make', codec,
-        binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_id]) as List<Object?>?;
-    if (replyList == null) {
-      throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyList.length > 1) {
-      throw PlatformException(
-        code: replyList[0]! as String,
-        message: replyList[1] as String?,
-        details: replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<void> load(String arg_id) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.flutter_yandex_ads.YandexAdsInterstitial.load', codec,
-        binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_id]) as List<Object?>?;
-    if (replyList == null) {
-      throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyList.length > 1) {
-      throw PlatformException(
-        code: replyList[0]! as String,
-        message: replyList[1] as String?,
-        details: replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<void> show(String arg_id) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.flutter_yandex_ads.YandexAdsInterstitial.show', codec,
+        'dev.flutter.pigeon.flutter_yandex_ads.YandexAdsAppOpen.make', codec,
         binaryMessenger: _binaryMessenger);
     final List<Object?>? replyList =
         await channel.send(<Object?>[arg_id]) as List<Object?>?;
@@ -132,14 +88,14 @@ class YandexAdsInterstitial {
   }
 }
 
-class _FlutterYandexAdsInterstitialCodec extends StandardMessageCodec {
-  const _FlutterYandexAdsInterstitialCodec();
+class _FlutterYandexAdsAppOpenCodec extends StandardMessageCodec {
+  const _FlutterYandexAdsAppOpenCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
-    if (value is InterstitialError) {
+    if (value is AppOpenError) {
       buffer.putUint8(128);
       writeValue(buffer, value.encode());
-    } else if (value is InterstitialImpression) {
+    } else if (value is AppOpenImpression) {
       buffer.putUint8(129);
       writeValue(buffer, value.encode());
     } else {
@@ -151,23 +107,23 @@ class _FlutterYandexAdsInterstitialCodec extends StandardMessageCodec {
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case 128: 
-        return InterstitialError.decode(readValue(buffer)!);
+        return AppOpenError.decode(readValue(buffer)!);
       case 129: 
-        return InterstitialImpression.decode(readValue(buffer)!);
+        return AppOpenImpression.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
   }
 }
 
-abstract class FlutterYandexAdsInterstitial {
-  static const MessageCodec<Object?> codec = _FlutterYandexAdsInterstitialCodec();
+abstract class FlutterYandexAdsAppOpen {
+  static const MessageCodec<Object?> codec = _FlutterYandexAdsAppOpenCodec();
 
   void onAdLoaded(String id);
 
-  void onAdFailedToLoad(String id, InterstitialError err);
+  void onAdFailedToLoad(String id, AppOpenError err);
 
-  void onAdFailedToShow(String id, InterstitialError err);
+  void onAdFailedToShow(String id, AppOpenError err);
 
   void onAdShown(String id);
 
@@ -175,23 +131,23 @@ abstract class FlutterYandexAdsInterstitial {
 
   void onAdClicked(String id);
 
-  void onImpression(String id, InterstitialImpression data);
+  void onImpression(String id, AppOpenImpression data);
 
-  static void setup(FlutterYandexAdsInterstitial? api, {BinaryMessenger? binaryMessenger}) {
+  static void setup(FlutterYandexAdsAppOpen? api, {BinaryMessenger? binaryMessenger}) {
     {
       final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onAdLoaded', codec,
+          'dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onAdLoaded', codec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
         channel.setMessageHandler(null);
       } else {
         channel.setMessageHandler((Object? message) async {
           assert(message != null,
-          'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onAdLoaded was null.');
+          'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onAdLoaded was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final String? arg_id = (args[0] as String?);
           assert(arg_id != null,
-              'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onAdLoaded was null, expected non-null String.');
+              'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onAdLoaded was null, expected non-null String.');
           api.onAdLoaded(arg_id!);
           return;
         });
@@ -199,21 +155,21 @@ abstract class FlutterYandexAdsInterstitial {
     }
     {
       final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onAdFailedToLoad', codec,
+          'dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onAdFailedToLoad', codec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
         channel.setMessageHandler(null);
       } else {
         channel.setMessageHandler((Object? message) async {
           assert(message != null,
-          'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onAdFailedToLoad was null.');
+          'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onAdFailedToLoad was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final String? arg_id = (args[0] as String?);
           assert(arg_id != null,
-              'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onAdFailedToLoad was null, expected non-null String.');
-          final InterstitialError? arg_err = (args[1] as InterstitialError?);
+              'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onAdFailedToLoad was null, expected non-null String.');
+          final AppOpenError? arg_err = (args[1] as AppOpenError?);
           assert(arg_err != null,
-              'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onAdFailedToLoad was null, expected non-null InterstitialError.');
+              'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onAdFailedToLoad was null, expected non-null AppOpenError.');
           api.onAdFailedToLoad(arg_id!, arg_err!);
           return;
         });
@@ -221,21 +177,21 @@ abstract class FlutterYandexAdsInterstitial {
     }
     {
       final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onAdFailedToShow', codec,
+          'dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onAdFailedToShow', codec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
         channel.setMessageHandler(null);
       } else {
         channel.setMessageHandler((Object? message) async {
           assert(message != null,
-          'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onAdFailedToShow was null.');
+          'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onAdFailedToShow was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final String? arg_id = (args[0] as String?);
           assert(arg_id != null,
-              'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onAdFailedToShow was null, expected non-null String.');
-          final InterstitialError? arg_err = (args[1] as InterstitialError?);
+              'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onAdFailedToShow was null, expected non-null String.');
+          final AppOpenError? arg_err = (args[1] as AppOpenError?);
           assert(arg_err != null,
-              'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onAdFailedToShow was null, expected non-null InterstitialError.');
+              'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onAdFailedToShow was null, expected non-null AppOpenError.');
           api.onAdFailedToShow(arg_id!, arg_err!);
           return;
         });
@@ -243,18 +199,18 @@ abstract class FlutterYandexAdsInterstitial {
     }
     {
       final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onAdShown', codec,
+          'dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onAdShown', codec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
         channel.setMessageHandler(null);
       } else {
         channel.setMessageHandler((Object? message) async {
           assert(message != null,
-          'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onAdShown was null.');
+          'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onAdShown was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final String? arg_id = (args[0] as String?);
           assert(arg_id != null,
-              'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onAdShown was null, expected non-null String.');
+              'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onAdShown was null, expected non-null String.');
           api.onAdShown(arg_id!);
           return;
         });
@@ -262,18 +218,18 @@ abstract class FlutterYandexAdsInterstitial {
     }
     {
       final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onAdDismissed', codec,
+          'dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onAdDismissed', codec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
         channel.setMessageHandler(null);
       } else {
         channel.setMessageHandler((Object? message) async {
           assert(message != null,
-          'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onAdDismissed was null.');
+          'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onAdDismissed was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final String? arg_id = (args[0] as String?);
           assert(arg_id != null,
-              'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onAdDismissed was null, expected non-null String.');
+              'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onAdDismissed was null, expected non-null String.');
           api.onAdDismissed(arg_id!);
           return;
         });
@@ -281,18 +237,18 @@ abstract class FlutterYandexAdsInterstitial {
     }
     {
       final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onAdClicked', codec,
+          'dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onAdClicked', codec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
         channel.setMessageHandler(null);
       } else {
         channel.setMessageHandler((Object? message) async {
           assert(message != null,
-          'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onAdClicked was null.');
+          'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onAdClicked was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final String? arg_id = (args[0] as String?);
           assert(arg_id != null,
-              'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onAdClicked was null, expected non-null String.');
+              'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onAdClicked was null, expected non-null String.');
           api.onAdClicked(arg_id!);
           return;
         });
@@ -300,21 +256,21 @@ abstract class FlutterYandexAdsInterstitial {
     }
     {
       final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onImpression', codec,
+          'dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onImpression', codec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
         channel.setMessageHandler(null);
       } else {
         channel.setMessageHandler((Object? message) async {
           assert(message != null,
-          'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onImpression was null.');
+          'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onImpression was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final String? arg_id = (args[0] as String?);
           assert(arg_id != null,
-              'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onImpression was null, expected non-null String.');
-          final InterstitialImpression? arg_data = (args[1] as InterstitialImpression?);
+              'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onImpression was null, expected non-null String.');
+          final AppOpenImpression? arg_data = (args[1] as AppOpenImpression?);
           assert(arg_data != null,
-              'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onImpression was null, expected non-null InterstitialImpression.');
+              'Argument for dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onImpression was null, expected non-null AppOpenImpression.');
           api.onImpression(arg_id!, arg_data!);
           return;
         });

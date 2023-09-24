@@ -29,6 +29,9 @@ abstract class YandexAdsRewarded {
   RewardedError onAdFailedToLoad(String id);
 
   @async
+  RewardedError onAdFailedToShow(String id);
+
+  @async
   void onAdShown(String id);
 
   @async
@@ -36,12 +39,6 @@ abstract class YandexAdsRewarded {
 
   @async
   void onAdClicked(String id);
-
-  @async
-  void onLeftApplication(String id);
-
-  @async
-  void onReturnedToApplication(String id);
 
   @async
   RewardedImpression onImpression(String id);

@@ -11,8 +11,8 @@ class YandexApi(private val context: Context): Yandex.YandexAdsApi {
     override fun initialize() {
         MobileAds.enableDebugErrorIndicator(true);
         MobileAds.enableLogging(true);
-        MobileAds.initialize(context, InitializationListener {
+        MobileAds.initialize(context) {
             Log.d("initialize", "initialize");
-        })
+        }
     }
 }

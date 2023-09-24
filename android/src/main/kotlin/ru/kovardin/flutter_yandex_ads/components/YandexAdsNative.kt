@@ -82,27 +82,27 @@ class YandexAdsNative(private val context: Context) : Native.YandexAdsNative {
         loader.loadAd(config.build())
     }
 
-    override fun onAdLoaded(id: String, result: Native.Result<Void>?) {
+    override fun onAdLoaded(id: String, result: Native.Result<Void>) {
         banners[id]?.onAdLoaded = result
     }
 
-    override fun onAdFailedToLoad(id: String, result: Native.Result<Native.NativeError>?) {
+    override fun onAdFailedToLoad(id: String, result: Native.Result<Native.NativeError>) {
         banners[id]?.onAdFailedToLoad = result
     }
 
-    override fun onAdClicked(id: String, result: Native.Result<Void>?) {
+    override fun onAdClicked(id: String, result: Native.Result<Void>) {
         banners[id]?.onAdClicked = result
     }
 
-    override fun onLeftApplication(id: String, result: Native.Result<Void>?) {
+    override fun onLeftApplication(id: String, result: Native.Result<Void>) {
         banners[id]?.onLeftApplication = result
     }
 
-    override fun onReturnedToApplication(id: String, result: Native.Result<Void>?) {
+    override fun onReturnedToApplication(id: String, result: Native.Result<Void>) {
         banners[id]?.onReturnedToApplication = result
     }
 
-    override fun onImpression(id: String, result: Native.Result<Native.NativeImpression>?) {
+    override fun onImpression(id: String, result: Native.Result<Native.NativeImpression>) {
         banners[id]?.onImpression = result
     }
 }

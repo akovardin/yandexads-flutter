@@ -1,3 +1,7 @@
+## 1.0.5
+
+* Updated android YandexAds to 6.0.1
+
 ## 1.0.4
 
 * Reformat banner logic

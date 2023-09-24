@@ -4,10 +4,9 @@ class YandexAdsRewardedComponent {
   YandexAdsRewardedComponent({
     Function? onAdLoaded,
     Function? onAdFailedToLoad,
+    Function? onAdFailedToShow,
     Function? onImpression,
     Function? onAdClicked,
-    Function? onLeftApplication,
-    Function? onReturnedToApplication,
     Function? onAdShown,
     Function? onAdDismissed,
     Function? onRewarded,
@@ -25,20 +24,16 @@ class YandexAdsRewardedComponent {
       _onAdFailedToLoad(id, onAdFailedToLoad);
     }
 
+    if (onAdFailedToShow != null) {
+      _onAdFailedToShow(id, onAdFailedToShow);
+    }
+
     if (onImpression != null) {
       _onImpression(id, onImpression);
     }
 
     if (onAdClicked != null) {
       _onAdClicked(id, onAdClicked);
-    }
-
-    if (onLeftApplication != null) {
-      _onLeftApplication(id, onLeftApplication);
-    }
-
-    if (onReturnedToApplication != null) {
-      _onReturnedToApplication(id, onReturnedToApplication);
     }
 
     if (onAdShown != null) {
@@ -70,6 +65,14 @@ class YandexAdsRewardedComponent {
     });
   }
 
+  void _onAdFailedToShow(String id, Function callback) {
+    rewarded.onAdFailedToShow(id).then((value) {
+      _onAdFailedToShow(id, callback);
+
+      callback(value);
+    });
+  }
+
   void _onImpression(String id, Function callback) {
     rewarded.onImpression(id).then((value) {
       _onImpression(id, callback);
@@ -81,22 +84,6 @@ class YandexAdsRewardedComponent {
   void _onAdClicked(String id, Function callback) {
     rewarded.onAdClicked(id).then((value) {
       _onAdClicked(id, callback);
-
-      callback();
-    });
-  }
-
-  void _onLeftApplication(String id, Function callback) {
-    rewarded.onLeftApplication(id).then((value) {
-      _onLeftApplication(id, callback);
-
-      callback();
-    });
-  }
-
-  void _onReturnedToApplication(String id, Function callback) {
-    rewarded.onReturnedToApplication(id).then((value) {
-      _onReturnedToApplication(id, callback);
 
       callback();
     });

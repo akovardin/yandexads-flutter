@@ -21,7 +21,7 @@ import java.util.Map;
 
 /** Generated class from Pigeon. */
 @SuppressWarnings({"unused", "unchecked", "CodeBlock2Expr", "RedundantSuppression", "serial"})
-public class Interstitial {
+public class AppOpen {
 
   /** Error class for passing custom error details to Flutter via a thrown PlatformException. */
   public static class FlutterError extends RuntimeException {
@@ -58,7 +58,7 @@ public class Interstitial {
   }
 
   /** Generated class from Pigeon that represents data sent in messages. */
-  public static final class InterstitialError {
+  public static final class AppOpenError {
     private @NonNull Long code;
 
     public @NonNull Long getCode() {
@@ -86,7 +86,7 @@ public class Interstitial {
     }
 
     /** Constructor is non-public to enforce null safety; use Builder. */
-    InterstitialError() {}
+    AppOpenError() {}
 
     public static final class Builder {
 
@@ -104,8 +104,8 @@ public class Interstitial {
         return this;
       }
 
-      public @NonNull InterstitialError build() {
-        InterstitialError pigeonReturn = new InterstitialError();
+      public @NonNull AppOpenError build() {
+        AppOpenError pigeonReturn = new AppOpenError();
         pigeonReturn.setCode(code);
         pigeonReturn.setDescription(description);
         return pigeonReturn;
@@ -120,8 +120,8 @@ public class Interstitial {
       return toListResult;
     }
 
-    static @NonNull InterstitialError fromList(@NonNull ArrayList<Object> list) {
-      InterstitialError pigeonResult = new InterstitialError();
+    static @NonNull AppOpenError fromList(@NonNull ArrayList<Object> list) {
+      AppOpenError pigeonResult = new AppOpenError();
       Object code = list.get(0);
       pigeonResult.setCode((code == null) ? null : ((code instanceof Integer) ? (Integer) code : (Long) code));
       Object description = list.get(1);
@@ -131,7 +131,7 @@ public class Interstitial {
   }
 
   /** Generated class from Pigeon that represents data sent in messages. */
-  public static final class InterstitialImpression {
+  public static final class AppOpenImpression {
     private @NonNull String data;
 
     public @NonNull String getData() {
@@ -146,7 +146,7 @@ public class Interstitial {
     }
 
     /** Constructor is non-public to enforce null safety; use Builder. */
-    InterstitialImpression() {}
+    AppOpenImpression() {}
 
     public static final class Builder {
 
@@ -157,8 +157,8 @@ public class Interstitial {
         return this;
       }
 
-      public @NonNull InterstitialImpression build() {
-        InterstitialImpression pigeonReturn = new InterstitialImpression();
+      public @NonNull AppOpenImpression build() {
+        AppOpenImpression pigeonReturn = new AppOpenImpression();
         pigeonReturn.setData(data);
         return pigeonReturn;
       }
@@ -171,32 +171,28 @@ public class Interstitial {
       return toListResult;
     }
 
-    static @NonNull InterstitialImpression fromList(@NonNull ArrayList<Object> list) {
-      InterstitialImpression pigeonResult = new InterstitialImpression();
+    static @NonNull AppOpenImpression fromList(@NonNull ArrayList<Object> list) {
+      AppOpenImpression pigeonResult = new AppOpenImpression();
       Object data = list.get(0);
       pigeonResult.setData((String) data);
       return pigeonResult;
     }
   }
   /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
-  public interface YandexAdsInterstitial {
+  public interface YandexAdsAppOpen {
 
     void make(@NonNull String id);
 
-    void load(@NonNull String id);
-
-    void show(@NonNull String id);
-
-    /** The codec used by YandexAdsInterstitial. */
+    /** The codec used by YandexAdsAppOpen. */
     static @NonNull MessageCodec<Object> getCodec() {
       return new StandardMessageCodec();
     }
-    /**Sets up an instance of `YandexAdsInterstitial` to handle messages through the `binaryMessenger`. */
-    static void setup(@NonNull BinaryMessenger binaryMessenger, @Nullable YandexAdsInterstitial api) {
+    /**Sets up an instance of `YandexAdsAppOpen` to handle messages through the `binaryMessenger`. */
+    static void setup(@NonNull BinaryMessenger binaryMessenger, @Nullable YandexAdsAppOpen api) {
       {
         BasicMessageChannel<Object> channel =
             new BasicMessageChannel<>(
-                binaryMessenger, "dev.flutter.pigeon.flutter_yandex_ads.YandexAdsInterstitial.make", getCodec());
+                binaryMessenger, "dev.flutter.pigeon.flutter_yandex_ads.YandexAdsAppOpen.make", getCodec());
         if (api != null) {
           channel.setMessageHandler(
               (message, reply) -> {
@@ -217,69 +213,21 @@ public class Interstitial {
           channel.setMessageHandler(null);
         }
       }
-      {
-        BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(
-                binaryMessenger, "dev.flutter.pigeon.flutter_yandex_ads.YandexAdsInterstitial.load", getCodec());
-        if (api != null) {
-          channel.setMessageHandler(
-              (message, reply) -> {
-                ArrayList<Object> wrapped = new ArrayList<Object>();
-                ArrayList<Object> args = (ArrayList<Object>) message;
-                String idArg = (String) args.get(0);
-                try {
-                  api.load(idArg);
-                  wrapped.add(0, null);
-                }
- catch (Throwable exception) {
-                  ArrayList<Object> wrappedError = wrapError(exception);
-                  wrapped = wrappedError;
-                }
-                reply.reply(wrapped);
-              });
-        } else {
-          channel.setMessageHandler(null);
-        }
-      }
-      {
-        BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(
-                binaryMessenger, "dev.flutter.pigeon.flutter_yandex_ads.YandexAdsInterstitial.show", getCodec());
-        if (api != null) {
-          channel.setMessageHandler(
-              (message, reply) -> {
-                ArrayList<Object> wrapped = new ArrayList<Object>();
-                ArrayList<Object> args = (ArrayList<Object>) message;
-                String idArg = (String) args.get(0);
-                try {
-                  api.show(idArg);
-                  wrapped.add(0, null);
-                }
- catch (Throwable exception) {
-                  ArrayList<Object> wrappedError = wrapError(exception);
-                  wrapped = wrappedError;
-                }
-                reply.reply(wrapped);
-              });
-        } else {
-          channel.setMessageHandler(null);
-        }
-      }
     }
   }
 
-  private static class FlutterYandexAdsInterstitialCodec extends StandardMessageCodec {
-    public static final FlutterYandexAdsInterstitialCodec INSTANCE = new FlutterYandexAdsInterstitialCodec();
+  private static class FlutterYandexAdsAppOpenCodec extends StandardMessageCodec {
+    public static final FlutterYandexAdsAppOpenCodec INSTANCE = new FlutterYandexAdsAppOpenCodec();
 
-    private FlutterYandexAdsInterstitialCodec() {}
+    private FlutterYandexAdsAppOpenCodec() {}
 
     @Override
     protected Object readValueOfType(byte type, @NonNull ByteBuffer buffer) {
       switch (type) {
         case (byte) 128:
-          return InterstitialError.fromList((ArrayList<Object>) readValue(buffer));
+          return AppOpenError.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 129:
-          return InterstitialImpression.fromList((ArrayList<Object>) readValue(buffer));
+          return AppOpenImpression.fromList((ArrayList<Object>) readValue(buffer));
         default:
           return super.readValueOfType(type, buffer);
       }
@@ -287,12 +235,12 @@ public class Interstitial {
 
     @Override
     protected void writeValue(@NonNull ByteArrayOutputStream stream, Object value) {
-      if (value instanceof InterstitialError) {
+      if (value instanceof AppOpenError) {
         stream.write(128);
-        writeValue(stream, ((InterstitialError) value).toList());
-      } else if (value instanceof InterstitialImpression) {
+        writeValue(stream, ((AppOpenError) value).toList());
+      } else if (value instanceof AppOpenImpression) {
         stream.write(129);
-        writeValue(stream, ((InterstitialImpression) value).toList());
+        writeValue(stream, ((AppOpenImpression) value).toList());
       } else {
         super.writeValue(stream, value);
       }
@@ -300,10 +248,10 @@ public class Interstitial {
   }
 
   /** Generated class from Pigeon that represents Flutter messages that can be called from Java. */
-  public static class FlutterYandexAdsInterstitial {
+  public static class FlutterYandexAdsAppOpen {
     private final @NonNull BinaryMessenger binaryMessenger;
 
-    public FlutterYandexAdsInterstitial(@NonNull BinaryMessenger argBinaryMessenger) {
+    public FlutterYandexAdsAppOpen(@NonNull BinaryMessenger argBinaryMessenger) {
       this.binaryMessenger = argBinaryMessenger;
     }
 
@@ -312,30 +260,30 @@ public class Interstitial {
     public interface Reply<T> {
       void reply(T reply);
     }
-    /** The codec used by FlutterYandexAdsInterstitial. */
+    /** The codec used by FlutterYandexAdsAppOpen. */
     static @NonNull MessageCodec<Object> getCodec() {
-      return FlutterYandexAdsInterstitialCodec.INSTANCE;
+      return FlutterYandexAdsAppOpenCodec.INSTANCE;
     }
     public void onAdLoaded(@NonNull String idArg, @NonNull Reply<Void> callback) {
       BasicMessageChannel<Object> channel =
           new BasicMessageChannel<>(
-              binaryMessenger, "dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onAdLoaded", getCodec());
+              binaryMessenger, "dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onAdLoaded", getCodec());
       channel.send(
           new ArrayList<Object>(Collections.singletonList(idArg)),
           channelReply -> callback.reply(null));
     }
-    public void onAdFailedToLoad(@NonNull String idArg, @NonNull InterstitialError errArg, @NonNull Reply<Void> callback) {
+    public void onAdFailedToLoad(@NonNull String idArg, @NonNull AppOpenError errArg, @NonNull Reply<Void> callback) {
       BasicMessageChannel<Object> channel =
           new BasicMessageChannel<>(
-              binaryMessenger, "dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onAdFailedToLoad", getCodec());
+              binaryMessenger, "dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onAdFailedToLoad", getCodec());
       channel.send(
           new ArrayList<Object>(Arrays.asList(idArg, errArg)),
           channelReply -> callback.reply(null));
     }
-    public void onAdFailedToShow(@NonNull String idArg, @NonNull InterstitialError errArg, @NonNull Reply<Void> callback) {
+    public void onAdFailedToShow(@NonNull String idArg, @NonNull AppOpenError errArg, @NonNull Reply<Void> callback) {
       BasicMessageChannel<Object> channel =
           new BasicMessageChannel<>(
-              binaryMessenger, "dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onAdFailedToShow", getCodec());
+              binaryMessenger, "dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onAdFailedToShow", getCodec());
       channel.send(
           new ArrayList<Object>(Arrays.asList(idArg, errArg)),
           channelReply -> callback.reply(null));
@@ -343,7 +291,7 @@ public class Interstitial {
     public void onAdShown(@NonNull String idArg, @NonNull Reply<Void> callback) {
       BasicMessageChannel<Object> channel =
           new BasicMessageChannel<>(
-              binaryMessenger, "dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onAdShown", getCodec());
+              binaryMessenger, "dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onAdShown", getCodec());
       channel.send(
           new ArrayList<Object>(Collections.singletonList(idArg)),
           channelReply -> callback.reply(null));
@@ -351,7 +299,7 @@ public class Interstitial {
     public void onAdDismissed(@NonNull String idArg, @NonNull Reply<Void> callback) {
       BasicMessageChannel<Object> channel =
           new BasicMessageChannel<>(
-              binaryMessenger, "dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onAdDismissed", getCodec());
+              binaryMessenger, "dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onAdDismissed", getCodec());
       channel.send(
           new ArrayList<Object>(Collections.singletonList(idArg)),
           channelReply -> callback.reply(null));
@@ -359,15 +307,15 @@ public class Interstitial {
     public void onAdClicked(@NonNull String idArg, @NonNull Reply<Void> callback) {
       BasicMessageChannel<Object> channel =
           new BasicMessageChannel<>(
-              binaryMessenger, "dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onAdClicked", getCodec());
+              binaryMessenger, "dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onAdClicked", getCodec());
       channel.send(
           new ArrayList<Object>(Collections.singletonList(idArg)),
           channelReply -> callback.reply(null));
     }
-    public void onImpression(@NonNull String idArg, @NonNull InterstitialImpression dataArg, @NonNull Reply<Void> callback) {
+    public void onImpression(@NonNull String idArg, @NonNull AppOpenImpression dataArg, @NonNull Reply<Void> callback) {
       BasicMessageChannel<Object> channel =
           new BasicMessageChannel<>(
-              binaryMessenger, "dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsInterstitial.onImpression", getCodec());
+              binaryMessenger, "dev.flutter.pigeon.flutter_yandex_ads.FlutterYandexAdsAppOpen.onImpression", getCodec());
       channel.send(
           new ArrayList<Object>(Arrays.asList(idArg, dataArg)),
           channelReply -> callback.reply(null));

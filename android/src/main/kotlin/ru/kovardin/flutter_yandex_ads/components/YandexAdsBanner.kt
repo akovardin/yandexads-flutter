@@ -1,8 +1,8 @@
 package ru.kovardin.flutter_yandex_ads.components
 
 import android.content.Context
-import com.yandex.mobile.ads.banner.AdSize
 import com.yandex.mobile.ads.banner.BannerAdEventListener
+import com.yandex.mobile.ads.banner.BannerAdSize
 import com.yandex.mobile.ads.banner.BannerAdView
 import com.yandex.mobile.ads.common.AdRequest
 import com.yandex.mobile.ads.common.AdRequestError
@@ -27,7 +27,7 @@ class YandexAdsBanner(private val context: Context): Banner.YandexAdsBanner {
     override fun make(id: String, width: Long, height: Long) {
         val banner = BannerData(view = BannerAdView(context))
 
-        banner.view.setAdSize(AdSize.stickySize(context, width.toInt()))
+        banner.view.setAdSize(BannerAdSize.stickySize(context, width.toInt()))
         banner.view.setAdUnitId(id)
         banner.view.setBannerAdEventListener(object : BannerAdEventListener {
             override fun onAdLoaded() {
@@ -68,27 +68,27 @@ class YandexAdsBanner(private val context: Context): Banner.YandexAdsBanner {
         banners[id]?.view?.loadAd(AdRequest.Builder().build())
     }
 
-    override fun onAdLoaded(id: String, result: Banner.Result<Void>?) {
+    override fun onAdLoaded(id: String, result: Banner.Result<Void>) {
         banners[id]?.onAdLoaded = result
     }
 
-    override fun onAdFailedToLoad(id: String, result: Banner.Result<Banner.BannerError>?) {
+    override fun onAdFailedToLoad(id: String, result: Banner.Result<Banner.BannerError>) {
         banners[id]?.onAdFailedToLoad = result
     }
 
-    override fun onAdClicked(id: String, result: Banner.Result<Void>?) {
+    override fun onAdClicked(id: String, result: Banner.Result<Void>) {
         banners[id]?.onAdClicked = result
     }
 
-    override fun onLeftApplication(id: String, result: Banner.Result<Void>?) {
+    override fun onLeftApplication(id: String, result: Banner.Result<Void>) {
         banners[id]?.onLeftApplication = result
     }
 
-    override fun onReturnedToApplication(id: String, result: Banner.Result<Void>?) {
+    override fun onReturnedToApplication(id: String, result: Banner.Result<Void>) {
         banners[id]?.onReturnedToApplication = result
     }
 
-    override fun onImpression(id: String, result: Banner.Result<Banner.BannerImpression>?) {
+    override fun onImpression(id: String, result: Banner.Result<Banner.BannerImpression>) {
         banners[id]?.onImpression = result
     }
 }

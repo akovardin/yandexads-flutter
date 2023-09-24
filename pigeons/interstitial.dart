@@ -16,28 +16,21 @@ abstract class YandexAdsInterstitial {
   void load(String id);
 
   void show(String id);
+}
 
-  @async
+@FlutterApi()
+abstract class FlutterYandexAdsInterstitial {
   void onAdLoaded(String id);
 
-  @async
-  InterstitialError onAdFailedToLoad(String id);
+  void onAdFailedToLoad(String id, InterstitialError err);
 
-  @async
+  void onAdFailedToShow(String id, InterstitialError err);
+
   void onAdShown(String id);
 
-  @async
   void onAdDismissed(String id);
 
-  @async
   void onAdClicked(String id);
 
-  @async
-  void onLeftApplication(String id);
-
-  @async
-  void onReturnedToApplication(String id);
-
-  @async
-  InterstitialImpression onImpression(String id);
+  void onImpression(String id, InterstitialImpression data);
 }

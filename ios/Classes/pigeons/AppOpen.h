@@ -10,10 +10,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class InterstitialError;
-@class InterstitialImpression;
+@class AppOpenError;
+@class AppOpenImpression;
 
-@interface InterstitialError : NSObject
+@interface AppOpenError : NSObject
 /// `init` unavailable to enforce nonnull fields, see the `make` class method.
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)makeWithCode:(NSNumber *)code
@@ -22,36 +22,34 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy) NSString * description;
 @end
 
-@interface InterstitialImpression : NSObject
+@interface AppOpenImpression : NSObject
 /// `init` unavailable to enforce nonnull fields, see the `make` class method.
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)makeWithData:(NSString *)data;
 @property(nonatomic, copy) NSString * data;
 @end
 
-/// The codec used by YandexAdsInterstitial.
-NSObject<FlutterMessageCodec> *YandexAdsInterstitialGetCodec(void);
+/// The codec used by YandexAdsAppOpen.
+NSObject<FlutterMessageCodec> *YandexAdsAppOpenGetCodec(void);
 
-@protocol YandexAdsInterstitial
+@protocol YandexAdsAppOpen
 - (void)makeId:(NSString *)id error:(FlutterError *_Nullable *_Nonnull)error;
-- (void)loadId:(NSString *)id error:(FlutterError *_Nullable *_Nonnull)error;
-- (void)showId:(NSString *)id error:(FlutterError *_Nullable *_Nonnull)error;
 @end
 
-extern void YandexAdsInterstitialSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<YandexAdsInterstitial> *_Nullable api);
+extern void YandexAdsAppOpenSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<YandexAdsAppOpen> *_Nullable api);
 
-/// The codec used by FlutterYandexAdsInterstitial.
-NSObject<FlutterMessageCodec> *FlutterYandexAdsInterstitialGetCodec(void);
+/// The codec used by FlutterYandexAdsAppOpen.
+NSObject<FlutterMessageCodec> *FlutterYandexAdsAppOpenGetCodec(void);
 
-@interface FlutterYandexAdsInterstitial : NSObject
+@interface FlutterYandexAdsAppOpen : NSObject
 - (instancetype)initWithBinaryMessenger:(id<FlutterBinaryMessenger>)binaryMessenger;
 - (void)onAdLoadedId:(NSString *)id completion:(void (^)(FlutterError *_Nullable))completion;
-- (void)onAdFailedToLoadId:(NSString *)id err:(InterstitialError *)err completion:(void (^)(FlutterError *_Nullable))completion;
-- (void)onAdFailedToShowId:(NSString *)id err:(InterstitialError *)err completion:(void (^)(FlutterError *_Nullable))completion;
+- (void)onAdFailedToLoadId:(NSString *)id err:(AppOpenError *)err completion:(void (^)(FlutterError *_Nullable))completion;
+- (void)onAdFailedToShowId:(NSString *)id err:(AppOpenError *)err completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)onAdShownId:(NSString *)id completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)onAdDismissedId:(NSString *)id completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)onAdClickedId:(NSString *)id completion:(void (^)(FlutterError *_Nullable))completion;
-- (void)onImpressionId:(NSString *)id data:(InterstitialImpression *)data completion:(void (^)(FlutterError *_Nullable))completion;
+- (void)onImpressionId:(NSString *)id data:(AppOpenImpression *)data completion:(void (^)(FlutterError *_Nullable))completion;
 @end
 
 NS_ASSUME_NONNULL_END

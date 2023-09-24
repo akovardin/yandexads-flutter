@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_yandex_ads/components/appopen.dart';
 import 'package:flutter_yandex_ads/components/banner.dart';
 import 'package:flutter_yandex_ads/components/interstitial.dart';
 import 'package:flutter_yandex_ads/components/rewarded.dart';
+import 'package:flutter_yandex_ads/pigeons/appopen.dart';
 import 'package:flutter_yandex_ads/pigeons/banner.dart';
 import 'package:flutter_yandex_ads/pigeons/interstitial.dart';
+import 'package:flutter_yandex_ads/pigeons/native.dart';
 import 'package:flutter_yandex_ads/pigeons/rewarded.dart';
 import 'package:flutter_yandex_ads/widgets/banner.dart';
 import 'package:flutter_yandex_ads/widgets/native.dart';
@@ -26,6 +29,28 @@ class _AppState extends State<App> {
     super.initState();
 
     FlutterYandexAds.initialize();
+
+    YandexAdsAppOpenComponent(
+      id: "demo-appopenad-yandex",
+      onAdLoaded: () {
+        print('appopen onAdLoaded');
+      },
+      onAdFailedToLoad: (InterstitialError err) {
+        print('appopen onAdFailedToLoad code: ${err.code}, description: ${err.description}');
+      },
+      onAdFailedToShow: (InterstitialError err) {
+        print('appopen onAdFailedToShow description: ${err.description}');
+      },
+      onAdDismissed: () {
+        print("appopen onAdDismissed");
+      },
+      onAdShown: () {
+        print("appopen onAdShown");
+      },
+      onImpression: (AppOpenImpression? data) {
+        print('appopen onImpression ${data?.data}');
+      },
+    );
   }
 
   @override
@@ -137,7 +162,7 @@ class _NativeScreenState extends State<NativeScreen> {
             onAdFailedToLoad: (BannerError err) {
               print('native onAdFailedToLoad code: ${err.code}, description: ${err.description}');
             },
-            onImpression: (BannerImpression? data) {
+            onImpression: (NativeImpression? data) {
               print("native onImpression ${data?.data}");
             },
             onAdClicked: () {
@@ -171,6 +196,9 @@ class _InterstitialScreenState extends State<InterstitialScreen> {
       },
       onAdFailedToLoad: (InterstitialError err) {
         print('interstitial onAdFailedToLoad code: ${err.code}, description: ${err.description}');
+      },
+      onAdFailedToShow: (InterstitialError err) {
+        print('interstitial onAdFailedToShow description: ${err.description}');
       },
       onAdDismissed: () {
         print("interstitial onAdDismissed");
@@ -222,8 +250,11 @@ class _RewardedScreenState extends State<RewardedScreen> {
         onAdLoaded: () {
           print('rewarded onAdLoaded');
         },
-        onAdFailedToLoad: (InterstitialError err) {
+        onAdFailedToLoad: (RewardedError err) {
           print('rewarded onAdFailedToLoad code: ${err.code}, description: ${err.description}');
+        },
+        onAdFailedToShow: (RewardedError err) {
+          print('rewarded onAdFailedToShow description: ${err.description}');
         },
         onAdDismissed: () {
           print("rewarded onAdDismissed");
