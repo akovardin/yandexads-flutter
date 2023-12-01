@@ -7,26 +7,30 @@
 
 import Foundation
 import YandexMobileAds
+import Flutter
 
 
 struct BannerData {
     var view: YMAAdView!
-    var onAdLoaded: ((FlutterError?) -> Void)? = nil
-    var onAdFailed: ((BannerError?, FlutterError?) -> Void)? = nil
-    var onAdShownId: ((FlutterError?) -> Void)? = nil
-    var onAdDismissedId: ((FlutterError?) -> Void)? = nil
-    var onAdClickedId: ((FlutterError?) -> Void)? = nil
-    var onLeftApplicationId: ((FlutterError?) -> Void)? = nil
-    var onReturned: ((FlutterError?) -> Void)? = nil
-    var onImpressionId: ((BannerImpression?, FlutterError?) -> Void)? = nil
+    var onAdLoaded: ((Result<Void, Error>) -> Void)? = nil
+    var onAdFailed: ((Result<BannerError, Error>) -> Void)? = nil
+    var onAdClickedId: ((Result<Void, Error>) -> Void)? = nil
+    var onLeftApplicationId: ((Result<Void, Error>) -> Void)? = nil
+    var onReturned: ((Result<Void, Error>) -> Void)? = nil
+    var onImpressionId: ((Result<BannerImpression, Error>) -> Void)? = nil
 }
 
 class YandexAdsBannerComponent: NSObject, YandexAdsBanner {
+
     var banners: [String: BannerData] = [:]
     
-    func makeId(_ id: String, width: NSNumber, height: NSNumber, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+    func make(id: String, width: Int64, height: Int64) throws {
         let banner = BannerData(
-            view: YMAAdView(adUnitID: id, adSize: YMAAdSize.flexibleSize(with: .init(width: width.intValue, height: height.intValue)))
+            view: YMAAdView(
+                adUnitID: id,
+                adSize: YMABannerAdSize.inlineSize(
+                    withWidth: CGFloat(width),
+                    maxHeight: CGFloat(height)))
         )
         
         banner.view.delegate = self
@@ -35,32 +39,31 @@ class YandexAdsBannerComponent: NSObject, YandexAdsBanner {
         banners[id] = banner
     }
     
-    func loadId(_ id: String, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+    func load(id: String) throws {
         banners[id]?.view.loadAd()
     }
     
-    func onAdLoadedId(_ id: String, completion: @escaping (FlutterError?) -> Void) {
+    func onAdLoaded(id: String, completion: @escaping (Result<Void, Error>) -> Void) {
         banners[id]?.onAdLoaded = completion
     }
     
-    func onAdFailed(toLoadId id: String, completion: @escaping (BannerError?, FlutterError?) -> Void) {
+    func onAdFailedToLoad(id: String, completion: @escaping (Result<BannerError, Error>) -> Void) {
         banners[id]?.onAdFailed = completion
     }
     
-    func onAdClickedId(_ id: String, completion: @escaping (FlutterError?) -> Void) {
+    func onAdClicked(id: String, completion: @escaping (Result<Void, Error>) -> Void) {
         banners[id]?.onAdClickedId = completion
     }
     
-    func onLeftApplicationId(_ id: String, completion: @escaping (FlutterError?) -> Void) {
+    func onLeftApplication(id: String, completion: @escaping (Result<Void, Error>) -> Void) {
         banners[id]?.onLeftApplicationId = completion
     }
     
-    
-    func onReturned(toApplicationId id: String, completion: @escaping (FlutterError?) -> Void) {
+    func onReturnedToApplication(id: String, completion: @escaping (Result<Void, Error>) -> Void) {
         banners[id]?.onReturned = completion
     }
     
-    func onImpressionId(_ id: String, completion: @escaping (BannerImpression?, FlutterError?) -> Void) {
+    func onImpression(id: String, completion: @escaping (Result<BannerImpression, Error>) -> Void) {
         banners[id]?.onImpressionId = completion
     }
 }
@@ -69,49 +72,37 @@ class YandexAdsBannerComponent: NSObject, YandexAdsBanner {
 extension YandexAdsBannerComponent: YMAAdViewDelegate {
     func adViewDidLoad(_ adView: YMAAdView) {
         if let callback =  banners[adView.adUnitID]?.onAdLoaded {
-            callback(nil)
+            callback(Result.success(()))
         }
     }
 
     func adViewDidFailLoading(_ adView: YMAAdView, error: Error) {
-        let response = BannerError.make(
-            withCode: error._code as NSNumber,
+        let response = BannerError(
+            code: Int64(error._code),
             description: error.localizedDescription)
 
         if let callback =  banners[adView.adUnitID]?.onAdFailed  {
-            callback(response, nil)
+            callback(Result.success(response))
         }
     }
 
     func adViewDidClick(_ adView: YMAAdView) {
-        if let callback = banners[adView.adUnitID]?.onLeftApplicationId  {
-            callback(nil)
+        if let callback = banners[adView.adUnitID]?.onAdClickedId  {
+            callback(Result.success(()))
         }
     }
 
     func adViewWillLeaveApplication(_ adView: YMAAdView) {
-        if let callback = banners[adView.adUnitID]?.onAdClickedId  {
-            callback(nil)
-        }
-    }
-
-    func adView(_ adView: YMAAdView, willPresentScreen viewController: UIViewController?) {
-        if let callback = banners[adView.adUnitID]?.onAdShownId  {
-            callback(nil)
-        }
-    }
-
-    func adView(_ adView: YMAAdView, didDismissScreen viewController: UIViewController?) {
-        if let callback = banners[adView.adUnitID]?.onAdDismissedId  {
-            callback(nil)
+        if let callback = banners[adView.adUnitID]?.onLeftApplicationId  {
+            callback(Result.success(()))
         }
     }
 
     func adView(_ adView: YMAAdView, didTrackImpressionWith impressionData: YMAImpressionData?) {
-        let response = BannerImpression.make(withData: impressionData?.rawData ?? "")
+        let response = BannerImpression(data: impressionData?.rawData ?? "")
         
         if let callback = banners[adView.adUnitID]?.onImpressionId  {
-            callback(response, nil)
+            callback(Result.success(response))
         }
     }
 }

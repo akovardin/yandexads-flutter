@@ -7,11 +7,11 @@ import com.yandex.mobile.ads.banner.BannerAdView
 import com.yandex.mobile.ads.common.AdRequest
 import com.yandex.mobile.ads.common.AdRequestError
 import com.yandex.mobile.ads.common.ImpressionData
-import ru.kovardin.flutter_yandex_ads.pigeons.Banner
+import ru.kovardin.flutter_yandex_ads.pigeons.banner.YandexAdsBanner as Banner
 
 data class BannerData(
     var view: BannerAdView,
-    var onAdLoaded: Banner.Result<Void>? = null,
+    var onAdLoaded: ((Result<Unit>) -> Unit)? = null,
     var onAdFailedToLoad: Banner.Result<Banner.BannerError>? = null,
     var onAdShown: Banner.Result<Void>? = null,
     var onAdDismissed: Banner.Result<Void>? = null,
@@ -21,7 +21,7 @@ data class BannerData(
     var onImpression: Banner.Result<Banner.BannerImpression>? = null,
 )
 
-class YandexAdsBanner(private val context: Context): Banner.YandexAdsBanner {
+class YandexAdsBanner(private val context: Context): Banner {
     var banners: MutableMap<String, BannerData> = mutableMapOf()
 
     override fun make(id: String, width: Long, height: Long) {
@@ -31,7 +31,9 @@ class YandexAdsBanner(private val context: Context): Banner.YandexAdsBanner {
         banner.view.setAdUnitId(id)
         banner.view.setBannerAdEventListener(object : BannerAdEventListener {
             override fun onAdLoaded() {
-                banner.onAdLoaded?.success(null)
+                if (banner.onAdLoaded != null) {
+                    banner.onAdLoaded()
+                }
             }
 
             override fun onAdFailedToLoad(error: AdRequestError) {
@@ -68,8 +70,9 @@ class YandexAdsBanner(private val context: Context): Banner.YandexAdsBanner {
         banners[id]?.view?.loadAd(AdRequest.Builder().build())
     }
 
-    override fun onAdLoaded(id: String, result: Banner.Result<Void>) {
-        banners[id]?.onAdLoaded = result
+    override fun onAdLoaded(id: String, callback: (Result<Unit>) -> Unit) {
+
+        banners[id]?.onAdLoaded = callback
     }
 
     override fun onAdFailedToLoad(id: String, result: Banner.Result<Banner.BannerError>) {

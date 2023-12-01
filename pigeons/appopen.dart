@@ -1,5 +1,16 @@
 import 'package:pigeon/pigeon.dart';
 
+@ConfigurePigeon(PigeonOptions(
+  dartOut: 'lib/pigeons/appopen.dart',
+  dartOptions: DartOptions(),
+  kotlinOut: 'android/src/main/kotlin/ru/kovardin/flutter_yandex_ads/pigeons/appopen/Appopen.kt',
+  kotlinOptions: KotlinOptions(
+    package: 'ru.kovardin.flutter_yandex_ads.pigeons.appopen',
+  ),
+  dartPackageName: 'flutter_yandex_ads',
+  swiftOut: 'ios/Classes/pigeons/Appopen.g.swift',
+  swiftOptions: SwiftOptions(),
+))
 class AppOpenError {
   late int code;
   late String description;

@@ -3,7 +3,7 @@ import UIKit
 import AppTrackingTransparency
 
 class YandexApi: NSObject, YandexAdsApi {
-    func initializeWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+    func initialize() throws {
         if #available(iOS 14, *) {
             ATTrackingManager.requestTrackingAuthorization { status in
                 // Start ad loading

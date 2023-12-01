@@ -1,5 +1,16 @@
 import 'package:pigeon/pigeon.dart';
 
+@ConfigurePigeon(PigeonOptions(
+  dartOut: 'lib/pigeons/rewarded.dart',
+  dartOptions: DartOptions(),
+  kotlinOut: 'android/src/main/kotlin/ru/kovardin/flutter_yandex_ads/pigeons/rewarded/Rewarded.kt',
+  kotlinOptions: KotlinOptions(
+    package: 'ru.kovardin.flutter_yandex_ads.pigeons.rewarded',
+  ),
+  dartPackageName: 'flutter_yandex_ads',
+  swiftOut: 'ios/Classes/pigeons/Rewarded.g.swift',
+  swiftOptions: SwiftOptions(),
+))
 class RewardedError {
   late int code;
   late String description;

@@ -7,26 +7,26 @@
 
 import Foundation
 import YandexMobileAds
+import Flutter
 
 
 struct NativeData {
     var view: YMANativeBannerView? = nil
     var delegate: YandexAdsNativeLoadedDelegate? = nil
-    var onAdLoaded: ((FlutterError?) -> Void)? = nil
-    var onAdFailed: ((NativeError?, FlutterError?) -> Void)? = nil
-    var onAdShown: ((FlutterError?) -> Void)? = nil
-    var onAdDismissed: ((FlutterError?) -> Void)? = nil
-    var onAdClicked: ((FlutterError?) -> Void)? = nil
-    var onLeftApplication: ((FlutterError?) -> Void)? = nil
-    var onReturned: ((FlutterError?) -> Void)? = nil
-    var onImpression: ((NativeImpression?, FlutterError?) -> Void)? = nil
+    var onAdLoaded: ((Result<Void, Error>) -> Void)? = nil
+    var onAdFailed: ((Result<NativeError, Error>) -> Void)? = nil
+    var onAdClicked: ((Result<Void, Error>) -> Void)? = nil
+    var onAdShown: ((Result<Void, Error>) -> Void)? = nil
+    var onLeftApplication: ((Result<Void, Error>) -> Void)? = nil
+    var onReturned: ((Result<Void, Error>) -> Void)? = nil
+    var onImpression: ((Result<NativeImpression, Error>) -> Void)? = nil
 }
 
 class YandexAdsNativeComponent: NSObject, YandexAdsNative {
     var banners: [String: NativeData] = [:]
     let loader = YMANativeAdLoader()
     
-    func makeId(_ id: String, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+    func make(id: String) throws {
         banners[id] = NativeData(
             view: YMANativeBannerView(),
             delegate: YandexAdsNativeLoadedDelegate(
@@ -40,18 +40,17 @@ class YandexAdsNativeComponent: NSObject, YandexAdsNative {
         )
     }
     
-    func loadId(_ id: String, width: NSNumber, height: NSNumber, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        
+    func load(id: String, width: Int64, height: Int64) throws {
         if (banners[id]?.delegate != nil) {
             loader.delegate = banners[id]?.delegate
         }
         
         let configuration = YMAMutableNativeAdRequestConfiguration(adUnitID: id)
         
-        if (width.intValue > 0 || height.intValue > 0 ) {
+        if (width > 0 || height > 0 ) {
             configuration.parameters = [
-                "preferable-height": width.stringValue,
-                "preferable-width": height.stringValue,
+                "preferable-height": "\(width)",
+                "preferable-width": "\(height)",
             ]
         }
         configuration.shouldLoadImagesAutomatically = true
@@ -59,28 +58,27 @@ class YandexAdsNativeComponent: NSObject, YandexAdsNative {
         loader.loadAd(with: configuration)
     }
     
-    func onAdFailed(toLoadId id: String, completion: @escaping (NativeError?, FlutterError?) -> Void) {
-        banners[id]?.onAdFailed = completion
-    }
-    
-    func onAdLoadedId(_ id: String, completion: @escaping (FlutterError?) -> Void) {
+    func onAdLoaded(id: String, completion: @escaping (Result<Void, Error>) -> Void) {
         banners[id]?.onAdLoaded = completion
     }
     
+    func onAdFailedToLoad(id: String, completion: @escaping (Result<NativeError, Error>) -> Void) {
+        banners[id]?.onAdFailed = completion
+    }
     
-    func onAdClickedId(_ id: String, completion: @escaping (FlutterError?) -> Void) {
+    func onAdClicked(id: String, completion: @escaping (Result<Void, Error>) -> Void) {
         banners[id]?.onAdClicked = completion
     }
     
-    func onLeftApplicationId(_ id: String, completion: @escaping (FlutterError?) -> Void) {
+    func onLeftApplication(id: String, completion: @escaping (Result<Void, Error>) -> Void) {
         banners[id]?.onLeftApplication = completion
     }
     
-    func onReturned(toApplicationId id: String, completion: @escaping (FlutterError?) -> Void) {
+    func onReturnedToApplication(id: String, completion: @escaping (Result<Void, Error>) -> Void) {
         banners[id]?.onReturned = completion
     }
     
-    func onImpressionId(_ id: String, completion: @escaping (NativeImpression?, FlutterError?) -> Void) {
+    func onImpression(id: String, completion: @escaping (Result<NativeImpression, Error>) -> Void) {
         banners[id]?.onImpression = completion
     }
 }
@@ -113,17 +111,17 @@ class YandexAdsNativeLoadedDelegate: NSObject, YMANativeAdLoaderDelegate {
         component.banners[id]?.view?.ad = ad
         
         if let callback =  component.banners[id]?.onAdLoaded {
-            callback(nil)
+            callback(Result.success(()))
         }
     }
     
     func nativeAdLoader(_ loader: YMANativeAdLoader, didFailLoadingWithError error: Error) {
-        let response = NativeError.make(
-            withCode: error._code as NSNumber,
+        let response = NativeError(
+            code: Int64(error._code),
             description: error.localizedDescription)
         
         if let callback =  component.banners[id]?.onAdFailed {
-            callback(response, nil)
+            callback(Result.success(response))
         }
     }
 }
@@ -142,26 +140,28 @@ class YandexAdsNativeDelegate: NSObject, YMANativeAdDelegate {
     }
     
     func nativeAd(_ ad: YMANativeAd, willPresentScreen viewController: UIViewController?) {
-        print("Native ad will present")
+        if let callback =  component.banners[id]?.onReturned {
+            callback(Result.success(()))
+        }
     }
     
     func nativeAdWillLeaveApplication(_ ad: YMANativeAd) {
         if let callback =  component.banners[id]?.onLeftApplication {
-            callback(nil)
+            callback(Result.success(()))
         }
     }
     
     func nativeAdDidClick(_ ad: YMANativeAd) {
         if let callback =  component.banners[id]?.onAdClicked {
-            callback(nil)
+            callback(Result.success(()))
         }
     }
     
     func nativeAd(_ ad: YMANativeAd, didTrackImpressionWith impressionData: YMAImpressionData?) {
-        let response = NativeImpression.make(withData: impressionData?.rawData ?? "")
+        let response = NativeImpression(data: impressionData?.rawData ?? "")
         
         if let callback =  component.banners[id]?.onImpression {
-            callback(response, nil)
+            callback(Result.success(response))
         }
     }
 }

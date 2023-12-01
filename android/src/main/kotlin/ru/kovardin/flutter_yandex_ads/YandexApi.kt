@@ -4,9 +4,9 @@ import android.content.Context
 import android.util.Log
 import com.yandex.mobile.ads.common.InitializationListener
 import com.yandex.mobile.ads.common.MobileAds
-import ru.kovardin.flutter_yandex_ads.pigeons.Yandex
+import ru.kovardin.flutter_yandex_ads.pigeons.YandexAdsApi
 
-class YandexApi(private val context: Context): Yandex.YandexAdsApi {
+class YandexApi(private val context: Context): YandexAdsApi {
 
     override fun initialize() {
         MobileAds.enableDebugErrorIndicator(true);

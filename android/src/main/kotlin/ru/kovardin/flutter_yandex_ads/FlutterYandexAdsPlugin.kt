@@ -25,6 +25,7 @@ import ru.kovardin.flutter_yandex_ads.pigeons.Native
 import ru.kovardin.flutter_yandex_ads.pigeons.Rewarded
 import ru.kovardin.flutter_yandex_ads.views.YandexAdsBannerViewFactory
 import ru.kovardin.flutter_yandex_ads.pigeons.Yandex
+import ru.kovardin.flutter_yandex_ads.pigeons.YandexAdsApi
 import ru.kovardin.flutter_yandex_ads.views.YandexAdsNativeViewFactory
 
 /** FlutterYandexAdsPlugin */
@@ -44,7 +45,7 @@ class FlutterYandexAdsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
 
     // api set
     val api = YandexApi(context)
-    Yandex.YandexAdsApi.setup(messenger, api)
+    YandexAdsApi.setUp(messenger, api)
 
 
     val banner = YandexAdsBanner(context)
@@ -55,8 +56,8 @@ class FlutterYandexAdsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
     binding.platformViewRegistry.registerViewFactory("yandex-ads-native", YandexAdsNativeViewFactory(native));
 
     // components
-    Banner.YandexAdsBanner.setup(messenger, banner)
-    Native.YandexAdsNative.setup(messenger, native)
+    YandexAdsBanner.setup(messenger, banner)
+    YandexAdsNative.setup(messenger, native)
 
   }
 

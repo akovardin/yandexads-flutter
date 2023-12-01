@@ -14,12 +14,12 @@ import com.yandex.mobile.ads.common.AdRequestConfiguration
 import com.yandex.mobile.ads.common.AdRequestError
 import com.yandex.mobile.ads.common.ImpressionData
 import io.flutter.embedding.engine.plugins.FlutterPlugin
-import ru.kovardin.flutter_yandex_ads.pigeons.AppOpen
-import ru.kovardin.flutter_yandex_ads.pigeons.AppOpen.AppOpenError
-import ru.kovardin.flutter_yandex_ads.pigeons.AppOpen.AppOpenImpression
-import ru.kovardin.flutter_yandex_ads.pigeons.AppOpen.FlutterYandexAdsAppOpen
+import ru.kovardin.flutter_yandex_ads.pigeons.appopen.AppOpenError
+import ru.kovardin.flutter_yandex_ads.pigeons.appopen.AppOpenImpression
+import ru.kovardin.flutter_yandex_ads.pigeons.appopen.FlutterYandexAdsAppOpen
+import ru.kovardin.flutter_yandex_ads.pigeons.appopen.YandexAdsAppOpen as AppOpen
 
-class YandexAdsAppOpen(private val context: Context, private val activity: Activity, private val callbacks: YandexAdsAppOpenCallbacks) : AppOpen.YandexAdsAppOpen {
+class YandexAdsAppOpen(private val context: Context, private val activity: Activity, private val callbacks: YandexAdsAppOpenCallbacks) : AppOpen {
 
     private var ad: AppOpenAd? = null
     override fun make(id: String) {
@@ -37,11 +37,12 @@ class YandexAdsAppOpen(private val context: Context, private val activity: Activ
                     }
 
                     override fun onAdFailedToShow(error: AdError) {
-                        val err = AppOpenError.Builder()
-                        err.setCode(0)
-                        err.setDescription(error.description)
+                        val err = AppOpenError(
+                            code = 0,
+                            description = error.description,
+                        )
 
-                        callbacks.onAdFailedToShow(id, err.build())
+                        callbacks.onAdFailedToShow(id, err)
                     }
 
                     override fun onAdDismissed() {
@@ -56,20 +57,20 @@ class YandexAdsAppOpen(private val context: Context, private val activity: Activ
                     }
 
                     override fun onAdImpression(data: ImpressionData?) {
-                        val builder = AppOpenImpression.Builder()
-                        builder.setData(data?.rawData ?: "")
+                        val imp = AppOpenImpression(data = data?.rawData ?: "")
 
-                        callbacks.onImpression(id, builder.build())
+                        callbacks.onImpression(id, imp)
                     }
                 })
             }
 
             override fun onAdFailedToLoad(error: AdRequestError) {
-                val err = AppOpenError.Builder()
-                err.setCode(error.code.toLong())
-                err.setDescription(error.description)
+                val err = AppOpenError(
+                    code = error.code.toLong(),
+                    description = error.description
+                )
 
-                callbacks.onAdFailedToLoad(id, err.build())
+                callbacks.onAdFailedToLoad(id, err)
             }
         })
 
