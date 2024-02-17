@@ -6,27 +6,30 @@ import com.yandex.mobile.ads.common.AdError
 import com.yandex.mobile.ads.common.AdRequestConfiguration
 import com.yandex.mobile.ads.common.AdRequestError
 import com.yandex.mobile.ads.common.ImpressionData
+import com.yandex.mobile.ads.interstitial.InterstitialAd
+import com.yandex.mobile.ads.interstitial.InterstitialAdLoader
 import com.yandex.mobile.ads.rewarded.Reward
 import com.yandex.mobile.ads.rewarded.RewardedAd
 import com.yandex.mobile.ads.rewarded.RewardedAdEventListener
 import com.yandex.mobile.ads.rewarded.RewardedAdLoadListener
 import com.yandex.mobile.ads.rewarded.RewardedAdLoader
-import ru.kovardin.flutter_yandex_ads.pigeons.Rewarded
+import io.flutter.embedding.engine.plugins.FlutterPlugin
+import ru.kovardin.flutter_yandex_ads.pigeons.interstitial.FlutterYandexAdsInterstitial
+import ru.kovardin.flutter_yandex_ads.pigeons.interstitial.InterstitialError
+import ru.kovardin.flutter_yandex_ads.pigeons.interstitial.InterstitialImpression
+import ru.kovardin.flutter_yandex_ads.pigeons.rewarded.FlutterYandexAdsRewarded
+import ru.kovardin.flutter_yandex_ads.pigeons.rewarded.RewardedError
+import ru.kovardin.flutter_yandex_ads.pigeons.rewarded.RewardedEvent
+import ru.kovardin.flutter_yandex_ads.pigeons.rewarded.RewardedImpression
+
+import ru.kovardin.flutter_yandex_ads.pigeons.rewarded.YandexAdsRewarded as Rewarded
 
 data class RewardedData(
     var rewarded: RewardedAd? = null,
     var loader: RewardedAdLoader? = null,
-    var onAdLoaded: Rewarded.Result<Void>? = null,
-    var onAdFailedToLoad: Rewarded.Result<Rewarded.RewardedError>? = null,
-    var onAdFailedToShow: Rewarded.Result<Rewarded.RewardedError>? = null,
-    var onAdShown: Rewarded.Result<Void>? = null,
-    var onAdDismissed: Rewarded.Result<Void>? = null,
-    var onAdClicked: Rewarded.Result<Void>? = null,
-    var onImpression: Rewarded.Result<Rewarded.RewardedImpression>? = null,
-    var onRewarded: Rewarded.Result<Rewarded.RewardedEvent>? = null,
 )
 
-class YandexAdsRewarded(private val context: Context, private val activity: Activity): Rewarded.YandexAdsRewarded {
+class YandexAdsRewarded(private val context: Context, private val activity: Activity, private val callbacks: YandexAdsRewardedCallbacks): Rewarded {
     private var rewards: MutableMap<String, RewardedData> = mutableMapOf()
 
     override fun make(id: String) {
@@ -39,50 +42,57 @@ class YandexAdsRewarded(private val context: Context, private val activity: Acti
                     // save rewardedAd to a local variable
                     // now rewardedAd is ready to show
                     ad.rewarded = rewarded
-                    ad.onAdLoaded?.success(null)
+                    callbacks.onAdLoaded(id)
 
                     rewarded.setAdEventListener(object : RewardedAdEventListener {
                         override fun onAdShown() {
-                            ad.onAdShown?.success(null)
+                            callbacks.onAdShown(id)
                         }
 
                         override fun onAdFailedToShow(error: AdError) {
-                            val err = Rewarded.RewardedError.Builder()
-                            err.setCode(0)
-                            err.setDescription(error.description)
+                            val err = RewardedError(
+                                code = 0,
+                                description = error.description,
+                            )
 
-                            ad.onAdFailedToShow?.success(err.build())
+                            callbacks.onAdFailedToShow(id, err)
                         }
 
                         override fun onAdDismissed() {
-                            ad.onAdDismissed?.success(null)
+                            callbacks.onAdDismissed(id)
                         }
 
                         override fun onAdClicked() {
-                            ad.onAdClicked?.success(null)
+                            callbacks.onAdClicked(id)
                         }
 
                         override fun onAdImpression(data: ImpressionData?) {
-                            val builder = Rewarded.RewardedImpression.Builder()
-                            builder.setData(data?.rawData ?: "")
-                            ad.onImpression?.success(builder.build())
+                            val imp = RewardedImpression(
+                                data = data?.rawData.orEmpty()
+                            )
+
+                            callbacks.onImpression(id, imp)
                         }
 
                         override fun onRewarded(r: Reward) {
-                            val builder = Rewarded.RewardedEvent.Builder()
-                            builder.setAmount(r.amount.toLong())
-                            builder.setType(r.type)
-                            ad.onRewarded?.success(builder.build())
+                            val rew = RewardedEvent(
+                                amount = r.amount.toLong(),
+                                type = r.type,
+                            )
+
+                            callbacks.onRewarded(id, rew)
+
                         }
                     })
                 }
 
                 override fun onAdFailedToLoad(error: AdRequestError) {
-                    val err = Rewarded.RewardedError.Builder()
-                    err.setCode(error.code.toLong())
-                    err.setDescription(error.description)
+                    val err = RewardedError(
+                        code = error.code.toLong(),
+                        description = error.description,
+                    )
 
-                    ad.onAdFailedToLoad?.success(err.build())
+                    callbacks.onAdFailedToLoad(id, err)
                 }
             })
         }
@@ -101,39 +111,46 @@ class YandexAdsRewarded(private val context: Context, private val activity: Acti
     override fun show(id: String) {
         rewards[id]?.rewarded?.show(activity)
     }
+}
 
-    override fun onAdLoaded(id: String, result: Rewarded.Result<Void>) {
-        rewards[id]?.onAdLoaded = result
+
+class YandexAdsRewardedCallbacks(binding: FlutterPlugin.FlutterPluginBinding) {
+
+    var api: FlutterYandexAdsRewarded? = null
+
+    init {
+        api = FlutterYandexAdsRewarded(binding.getBinaryMessenger())
     }
 
-    override fun onAdFailedToLoad(id: String, result: Rewarded.Result<Rewarded.RewardedError>) {
-        rewards[id]?.onAdFailedToLoad = result
+    fun onAdLoaded(id: String) {
+        api?.onAdLoaded(id) {}
     }
 
-    override fun onAdFailedToShow(id: String, result: Rewarded.Result<Rewarded.RewardedError>) {
-        rewards[id]?.onAdFailedToLoad = result
+    fun onAdFailedToLoad(id: String,  error: RewardedError) {
+        api?.onAdFailedToLoad(id, error) {}
     }
 
-    override fun onAdShown(id: String, result: Rewarded.Result<Void>) {
-        rewards[id]?.onAdShown = result
+    fun onAdFailedToShow(id: String, error: RewardedError) {
+        api?.onAdFailedToLoad(id, error) {}
     }
 
-    override fun onAdDismissed(id: String, result: Rewarded.Result<Void>) {
-        rewards[id]?.onAdDismissed = result
+    fun onAdShown(id: String) {
+        api?.onAdShown(id) {}
     }
 
-    override fun onAdClicked(id: String, result: Rewarded.Result<Void>) {
-        rewards[id]?.onAdClicked = result
+    fun onAdDismissed(id: String) {
+        api?.onAdDismissed(id) {}
     }
 
-    override fun onImpression(
-        id: String,
-        result: Rewarded.Result<Rewarded.RewardedImpression>
-    ) {
-        rewards[id]?.onImpression = result
+    fun onAdClicked(id: String) {
+        api?.onAdClicked(id) {}
     }
 
-    override fun onRewarded(id: String, result: Rewarded.Result<Rewarded.RewardedEvent>) {
-        rewards[id]?.onRewarded = result
+    fun onImpression(id: String, data: RewardedImpression) {
+        api?.onImpression(id, data) {}
+    }
+
+    fun onRewarded(id: String, data: RewardedEvent) {
+        api?.onRewarded(id, data) {}
     }
 }

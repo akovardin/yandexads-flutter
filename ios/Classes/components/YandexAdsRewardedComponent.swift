@@ -4,202 +4,105 @@
 
 import Foundation
 import YandexMobileAds
+import Flutter
 
 struct RewardedData {
+    var loader: YMARewardedAdLoader? = nil
     var ad: YMARewardedAd? = nil
-//    var onAdLoaded: ((FlutterError?) -> Void)? = nil
-//    var onAdFailed: ((RewardedError?, FlutterError?) -> Void)? = nil
-//    var onAdShownId: ((FlutterError?) -> Void)? = nil
-//    var onAdDismissedId: ((FlutterError?) -> Void)? = nil
-//    var onAdClickedId: ((FlutterError?) -> Void)? = nil
-//    var onLeftApplicationId: ((FlutterError?) -> Void)? = nil
-//    var onReturned: ((FlutterError?) -> Void)? = nil
-//    var onImpressionId: ((RewardedImpression?, FlutterError?) -> Void)? = nil
-//    var onRewardedId: ((RewardedEvent?, FlutterError?) -> Void)? = nil
 }
+
 
 class YandexAdsRewardedComponent: NSObject, YandexAdsRewarded {
     
     private var rewardeds: [String: RewardedData] = [:]
     
+    private var callbacks: FlutterYandexAdsRewarded
+    
+    init(callbacks: FlutterYandexAdsRewarded) {
+        self.callbacks = callbacks
+    }
+    
     func make(id: String) throws {
+        let loader = YMARewardedAdLoader()
+        loader.delegate = self
+        rewardeds[id] = RewardedData(loader: loader)
         
     }
     
-    func load(id: String) throws {
+
+    func load(id: String) {
+        let configuration = YMAAdRequestConfiguration(adUnitID: id)
+        rewardeds[id]?.loader?.loadAd(with: configuration)
         
     }
     
-    func show(id: String) throws {
-        
+    func show(id: String) {
+        if let controller = UIApplication.shared.delegate?.window??.rootViewController as? FlutterViewController {
+            rewardeds[id]?.ad?.show(from: controller)
+        }
+    }
+}
+
+extension YandexAdsRewardedComponent: YMARewardedAdLoaderDelegate {
+    
+    func rewardedAdLoader(_ adLoader: YMARewardedAdLoader, didLoad rewardedAd: YMARewardedAd) {
+        let id = rewardedAd.adInfo?.adUnitId ?? ""
+        rewardeds[id]?.ad = rewardedAd
+        rewardeds[id]?.ad?.delegate = self
+        callbacks.onAdLoaded(id: id) {_ in }
     }
     
-    func onAdLoaded(id: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        
+    func rewardedAdLoader(_ adLoader: YMARewardedAdLoader, didFailToLoadWithError error: YMAAdRequestError) {
+        callbacks.onAdFailedToLoad(
+            id: error.adUnitId ?? "",
+            err: RewardedError(code: 0, description: error.error.localizedDescription),
+            completion: {_ in }
+        )
     }
-    
-    func onAdFailedToLoad(id: String, completion: @escaping (Result<RewardedError, Error>) -> Void) {
-        
-    }
-    
-    func onAdFailedToShow(id: String, completion: @escaping (Result<RewardedError, Error>) -> Void) {
-        
-    }
-    
-    func onAdShown(id: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        
-    }
-    
-    func onAdDismissed(id: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        
-    }
-    
-    func onAdClicked(id: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        
-    }
-    
-    func onImpression(id: String, completion: @escaping (Result<RewardedImpression, Error>) -> Void) {
-        
-    }
-    
-    func onRewarded(id: String, completion: @escaping (Result<RewardedEvent, Error>) -> Void) {
-        
-    }
-    
-    
-//    func makeId(_ id: String, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-//        let reward = YMARewardedAd(adUnitID: id)
-//        reward.delegate = self;
-//        
-//        rewardeds[id] = RewardedData(ad: reward)
-//    }
-//    
-//
-//    func loadId(_ id: String, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-//        rewardeds[id]?.ad?.load()
-//    }
-//    
-//    func showId(_ id: String, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-//        if let controller = UIApplication.shared.delegate?.window??.rootViewController as? FlutterViewController {
-//            rewardeds[id]?.ad?.present(from: controller)
-//        }
-//    }
-//   
-//
-//    func onAdLoadedId(_ id: String, completion: @escaping (FlutterError?) -> Void){
-//        rewardeds[id]?.onAdLoaded = completion
-//    }
-//    
-//    
-//    func onAdFailed(toLoadId id: String, completion: @escaping (RewardedError?, FlutterError?) -> Void) {
-//        rewardeds[id]?.onAdFailed = completion
-//    }
-//    
-//    
-//    func onAdShownId(_ id: String, completion: @escaping (FlutterError?) -> Void) {
-//        rewardeds[id]?.onAdShownId = completion
-//    }
-//    
-//    
-//    func onAdDismissedId(_ id: String, completion: @escaping (FlutterError?) -> Void) {
-//        rewardeds[id]?.onAdDismissedId = completion
-//    }
-//    
-//    func onAdClickedId(_ id: String, completion: @escaping (FlutterError?) -> Void) {
-//        rewardeds[id]?.onAdClickedId = completion
-//    }
-//    
-//    
-//    func onLeftApplicationId(_ id: String, completion: @escaping (FlutterError?) -> Void) {
-//        rewardeds[id]?.onLeftApplicationId = completion
-//    }
-//    
-//    
-//    func onReturned(toApplicationId id: String, completion: @escaping (FlutterError?) -> Void) {
-//        rewardeds[id]?.onReturned = completion
-//    }
-//    
-//    
-//    func onImpressionId(_ id: String, completion: @escaping (RewardedImpression?, FlutterError?) -> Void) {
-//        rewardeds[id]?.onImpressionId = completion
-//    }
-//    
-//    func onRewardedId(_ id: String, completion: @escaping (RewardedEvent?, FlutterError?) -> Void) {
-//        rewardeds[id]?.onRewardedId = completion
-//    }
 }
 
 
-//extension YandexAdsRewardedComponent: YMARewardedAdDelegate {
-//    func rewardedAdDidLoad(_ ad: YMARewardedAd) {
-//        if let callback = rewardeds[ad.adUnitID]?.onAdLoaded {
-//            callback(nil)
-//        }
-//    }
-//
-//    func rewardedAdDidFail(toLoad ad: YMARewardedAd, error: Error) {
-//        let response = RewardedError.make(
-//            withCode: error._code as NSNumber,
-//            description: error.localizedDescription)
-//
-//        if let callback = rewardeds[ad.adUnitID]?.onAdFailed {
-//            callback(response, nil)
-//        }
-//    }
-//
-//    func rewardedAdWillLeaveApplication(_ ad: YMARewardedAd) {
-//        if let callback = rewardeds[ad.adUnitID]?.onLeftApplicationId {
-//            callback(nil)
-//        }
-//    }
-//
-//    func rewardedAdDidFail(toPresent interstitialAd: YMARewardedAd, error: Error) {
-//        print("Failed to present rewarded. Error: \(error)")
-//    }
-//
-//    func rewardedAdWillAppear(_ interstitialAd: YMARewardedAd) {
-//        print("Rewarded ad will appear")
-//    }
-//
-//    func rewardedAdDidAppear(_ interstitialAd: YMARewardedAd) {
-//        print("Rewarded ad did appear")
-//    }
-//
-//    func rewardedAdWillDisappear(_ interstitialAd: YMARewardedAd) {
-//        print("Rewarded ad will disappear")
-//    }
-//
-//    func rewardedAdDidDisappear(_ interstitialAd: YMARewardedAd) {
-//        if let callback = rewardeds[interstitialAd.adUnitID]?.onAdDismissedId {
-//            callback(nil)
-//        }
-//    }
-//
-//    func rewardedAd(_ interstitialAd: YMARewardedAd, willPresentScreen webBrowser: UIViewController?) {
-//        if let callback = rewardeds[interstitialAd.adUnitID]?.onAdShownId {
-//            callback(nil)
-//        }
-//    }
-//
-//    func rewardedAd(_ interstitialAd: YMARewardedAd, didTrackImpressionWith impressionData: YMAImpressionData?) {
-//        let response = RewardedImpression.make(withData: impressionData?.rawData ?? "")
-//        
-//        if let callback = rewardeds[interstitialAd.adUnitID]?.onImpressionId {
-//            callback(response, nil)
-//        }
-//    }
-//    
-//    func rewardedAdDidClick(_ ad: YMARewardedAd) {
-//        if let callback = rewardeds[ad.adUnitID]?.onAdClickedId {
-//            callback(nil)
-//        }
-//    }
-//    
-//    func rewardedAd(_ ad: YMARewardedAd, didReward reward: YMAReward) {
-//        let response = RewardedEvent.make(withAmount: reward.amount as NSNumber, type: reward.type)
-//        
-//        if let callback = rewardeds[ad.adUnitID]?.onRewardedId {
-//            callback(response, nil)
-//        }
-//    }
-//}
+extension YandexAdsRewardedComponent: YMARewardedAdDelegate {
+   
+    func interstitialAd(_ rewardedAd: YMARewardedAd, didFailToShowWithError error: Error) {
+        let id = rewardedAd.adInfo?.adUnitId ?? ""
+        callbacks.onAdFailedToShow(
+            id: id,
+            err: RewardedError(code: 0, description: error.localizedDescription),
+            completion: {_ in }
+        )
+    }
+
+    func interstitialAdDidShow(_ rewardedAd: YMARewardedAd) {
+        let id = rewardedAd.adInfo?.adUnitId ?? ""
+        callbacks.onAdShown(id: id) {_ in }
+    }
+
+    func interstitialAdDidDismiss(_ rewardedAd: YMARewardedAd) {
+        let id = rewardedAd.adInfo?.adUnitId ?? ""
+        callbacks.onAdDismissed(id: id) {_ in }
+    }
+
+    func interstitialAdDidClick(_ rewardedAd: YMARewardedAd) {
+        let id = rewardedAd.adInfo?.adUnitId ?? ""
+        callbacks.onAdClicked(id: id) {_ in }
+    }
+
+    func interstitialAd(_ rewardedAd: YMARewardedAd, didTrackRewardedWith impressionData: YMAImpressionData?) {
+        let id = rewardedAd.adInfo?.adUnitId ?? ""
+        callbacks.onImpression(
+            id: id,
+            data: RewardedImpression(data: impressionData?.rawData ?? ""),
+            completion: {_ in }
+        )
+    }
+    
+    func rewardedAd(_ rewardedAd: YMARewardedAd, didReward reward: YMAReward) {
+        let id = rewardedAd.adInfo?.adUnitId ?? ""
+        callbacks.onRewarded(
+            id: id,
+            reward: RewardedEvent(amount: Int64(reward.amount), type: reward.type),
+            completion: {_ in }
+        )
+    }
+}

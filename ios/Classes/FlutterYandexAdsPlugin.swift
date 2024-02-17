@@ -10,7 +10,7 @@ public class FlutterYandexAdsPlugin: NSObject, FlutterPlugin {
       YandexAdsApiSetup.setUp(binaryMessenger: messenger, api: api)
 
       let interstitial = YandexAdsInterstitialComponent(callbacks: FlutterYandexAdsInterstitial(binaryMessenger: messenger))
-      let rewarded = YandexAdsRewardedComponent()
+      let rewarded = YandexAdsRewardedComponent(callbacks: FlutterYandexAdsRewarded(binaryMessenger: messenger))
       let banner = YandexAdsBannerComponent()
       let native = YandexAdsNativeComponent()
 

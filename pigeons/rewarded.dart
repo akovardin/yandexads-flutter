@@ -32,28 +32,23 @@ abstract class YandexAdsRewarded {
   void load(String id);
 
   void show(String id);
+}
 
-  @async
+@FlutterApi()
+abstract class FlutterYandexAdsRewarded {
   void onAdLoaded(String id);
 
-  @async
-  RewardedError onAdFailedToLoad(String id);
+  void onAdFailedToLoad(String id, RewardedError err);
 
-  @async
-  RewardedError onAdFailedToShow(String id);
+  void onAdFailedToShow(String id, RewardedError err);
 
-  @async
   void onAdShown(String id);
 
-  @async
   void onAdDismissed(String id);
 
-  @async
   void onAdClicked(String id);
 
-  @async
-  RewardedImpression onImpression(String id);
+  void onImpression(String id, RewardedImpression data);
 
-  @async
-  RewardedEvent onRewarded(String id);
+  void onRewarded(String id, RewardedEvent reward);
 }

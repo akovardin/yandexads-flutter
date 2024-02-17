@@ -15,8 +15,8 @@ Flutter Yandex Ads.
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.dependency 'YandexMobileAds', '~> 6.1.0'
-  s.dependency 'YandexMobileAdsInstream'
+  s.dependency 'YandexMobileAds', '6.4.0'
+  s.dependency 'YandexMobileAdsInstream', '0.24.0'
   s.dependency 'YandexMobileAdsMediation'
   s.dependency 'YandexMobileAdsAdMobAdapters'
   s.dependency 'YandexMobileAdsIronSourceAdapters'

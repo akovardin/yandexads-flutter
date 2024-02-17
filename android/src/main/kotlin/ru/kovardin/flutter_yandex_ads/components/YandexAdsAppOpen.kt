@@ -23,6 +23,16 @@ class YandexAdsAppOpen(private val context: Context, private val activity: Activ
 
     private var ad: AppOpenAd? = null
     override fun make(id: String) {
+        load(id);
+
+        val processLifecycleObserver = DefaultProcessLifecycleObserver(
+            onProcessCameForeground = ::showAppOpenAd
+        )
+
+        ProcessLifecycleOwner.get().lifecycle.addObserver(processLifecycleObserver)
+    }
+
+    private fun load(id: String) {
         val loader = AppOpenAdLoader(context)
         loader.setAdLoadListener(object : AppOpenAdLoadListener {
             override fun onAdLoaded(appOpenAd: AppOpenAd) {
@@ -49,7 +59,7 @@ class YandexAdsAppOpen(private val context: Context, private val activity: Activ
                         callbacks.onAdDismissed(id)
 
                         clear()
-                        make(id)
+                        load(id)
                     }
 
                     override fun onAdClicked() {
@@ -76,12 +86,6 @@ class YandexAdsAppOpen(private val context: Context, private val activity: Activ
 
         // для отладки можно использовать "demo-appopenad-yandex"
         loader.loadAd(AdRequestConfiguration.Builder(id).build())
-
-        val processLifecycleObserver = DefaultProcessLifecycleObserver(
-            onProcessCameForeground = ::showAppOpenAd
-        )
-
-        ProcessLifecycleOwner.get().lifecycle.addObserver(processLifecycleObserver)
     }
 
     private fun showAppOpenAd() {

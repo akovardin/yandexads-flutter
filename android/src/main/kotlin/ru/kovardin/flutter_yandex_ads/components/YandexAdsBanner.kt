@@ -7,21 +7,21 @@ import com.yandex.mobile.ads.banner.BannerAdView
 import com.yandex.mobile.ads.common.AdRequest
 import com.yandex.mobile.ads.common.AdRequestError
 import com.yandex.mobile.ads.common.ImpressionData
+import ru.kovardin.flutter_yandex_ads.pigeons.banner.BannerError
+import ru.kovardin.flutter_yandex_ads.pigeons.banner.BannerImpression
 import ru.kovardin.flutter_yandex_ads.pigeons.banner.YandexAdsBanner as Banner
 
 data class BannerData(
     var view: BannerAdView,
     var onAdLoaded: ((Result<Unit>) -> Unit)? = null,
-    var onAdFailedToLoad: Banner.Result<Banner.BannerError>? = null,
-    var onAdShown: Banner.Result<Void>? = null,
-    var onAdDismissed: Banner.Result<Void>? = null,
-    var onAdClicked: Banner.Result<Void>? = null,
-    var onLeftApplication: Banner.Result<Void>? = null,
-    var onReturnedToApplication: Banner.Result<Void>? = null,
-    var onImpression: Banner.Result<Banner.BannerImpression>? = null,
+    var onAdFailedToLoad: ((Result<BannerError>) -> Unit)? = null,
+    var onAdClicked: ((Result<Unit>) -> Unit)? = null,
+    var onLeftApplication: ((Result<Unit>) -> Unit)? = null,
+    var onReturnedToApplication: ((Result<Unit>) -> Unit)? = null,
+    var onImpression: ((Result<BannerImpression>) -> Unit)? = null,
 )
 
-class YandexAdsBanner(private val context: Context): Banner {
+class YandexAdsBanner(private val context: Context) : Banner {
     var banners: MutableMap<String, BannerData> = mutableMapOf()
 
     override fun make(id: String, width: Long, height: Long) {
@@ -31,35 +31,35 @@ class YandexAdsBanner(private val context: Context): Banner {
         banner.view.setAdUnitId(id)
         banner.view.setBannerAdEventListener(object : BannerAdEventListener {
             override fun onAdLoaded() {
-                if (banner.onAdLoaded != null) {
-                    banner.onAdLoaded()
-                }
+                banner.onAdLoaded?.let { it(Result.success(Unit)) }
             }
 
             override fun onAdFailedToLoad(error: AdRequestError) {
-                val builder = Banner.BannerError.Builder()
-                builder.setCode(error.code.toLong())
-                builder.setDescription(error.description)
+                val err = BannerError(
+                    code = error.code.toLong(),
+                    description = error.description,
+                )
 
-                banner.onAdFailedToLoad?.success(builder.build())
+                banner.onAdFailedToLoad?.let { it(Result.success(err)) }
             }
 
             override fun onLeftApplication() {
-                banner.onLeftApplication?.success(null)
+                banner.onLeftApplication?.let { it(Result.success(Unit)) }
             }
 
             override fun onReturnedToApplication() {
-                banner.onReturnedToApplication?.success(null)
+                banner.onReturnedToApplication?.let { it(Result.success(Unit)) }
             }
 
             override fun onImpression(data: ImpressionData?) {
-                val builder = Banner.BannerImpression.Builder()
-                builder.setData(data?.rawData ?: "")
-                banner.onImpression?.success(builder.build())
+                val imp = BannerImpression(
+                    data = data?.rawData.orEmpty(),
+                )
+                banner.onImpression?.let { it(Result.success(imp)) }
             }
 
             override fun onAdClicked() {
-                banner.onAdClicked?.success(null)
+                banner.onAdClicked?.let { it(Result.success(Unit)) }
             }
         })
 
@@ -75,23 +75,23 @@ class YandexAdsBanner(private val context: Context): Banner {
         banners[id]?.onAdLoaded = callback
     }
 
-    override fun onAdFailedToLoad(id: String, result: Banner.Result<Banner.BannerError>) {
-        banners[id]?.onAdFailedToLoad = result
+    override fun onAdFailedToLoad(id: String, callback: (Result<BannerError>) -> Unit) {
+        banners[id]?.onAdFailedToLoad = callback
     }
 
-    override fun onAdClicked(id: String, result: Banner.Result<Void>) {
-        banners[id]?.onAdClicked = result
+    override fun onAdClicked(id: String, callback: (Result<Unit>) -> Unit) {
+        banners[id]?.onAdClicked = callback
     }
 
-    override fun onLeftApplication(id: String, result: Banner.Result<Void>) {
-        banners[id]?.onLeftApplication = result
+    override fun onLeftApplication(id: String, callback: (Result<Unit>) -> Unit) {
+        banners[id]?.onLeftApplication = callback
     }
 
-    override fun onReturnedToApplication(id: String, result: Banner.Result<Void>) {
-        banners[id]?.onReturnedToApplication = result
+    override fun onReturnedToApplication(id: String, callback: (Result<Unit>) -> Unit) {
+        banners[id]?.onReturnedToApplication = callback
     }
 
-    override fun onImpression(id: String, result: Banner.Result<Banner.BannerImpression>) {
-        banners[id]?.onImpression = result
+    override fun onImpression(id: String, callback: (Result<BannerImpression>) -> Unit) {
+        banners[id]?.onImpression = callback
     }
 }

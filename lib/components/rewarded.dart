@@ -1,4 +1,5 @@
 import 'package:flutter_yandex_ads/pigeons/rewarded.dart';
+import 'package:flutter_yandex_ads/yandex.dart';
 
 class YandexAdsRewardedComponent {
   YandexAdsRewardedComponent({
@@ -14,103 +15,21 @@ class YandexAdsRewardedComponent {
   }) {
     rewarded = YandexAdsRewarded();
 
+    FlutterYandexAds.addRewarded(
+      id,
+      YandexAdsRewardedCallbacks(
+        onAdLoaded: onAdLoaded,
+        onAdFailedToLoad: onAdFailedToLoad,
+        onAdFailedToShow: onAdFailedToShow,
+        onImpression: onImpression,
+        onAdClicked: onAdClicked,
+        onAdShown: onAdShown,
+        onAdDismissed: onAdDismissed,
+        onReward: onRewarded,
+      ),
+    );
+
     rewarded.make(id);
-
-    if (onAdLoaded != null) {
-      _onAdLoaded(id, onAdLoaded);
-    }
-
-    if (onAdFailedToLoad != null) {
-      _onAdFailedToLoad(id, onAdFailedToLoad);
-    }
-
-    if (onAdFailedToShow != null) {
-      _onAdFailedToShow(id, onAdFailedToShow);
-    }
-
-    if (onImpression != null) {
-      _onImpression(id, onImpression);
-    }
-
-    if (onAdClicked != null) {
-      _onAdClicked(id, onAdClicked);
-    }
-
-    if (onAdShown != null) {
-      _onAdShown(id, onAdShown);
-    }
-
-    if (onAdDismissed != null) {
-      _onAdDismissed(id, onAdDismissed);
-    }
-
-    if (onRewarded != null) {
-      _onRewarded(id, onRewarded);
-    }
-  }
-
-  void _onAdLoaded(String id, Function callback) {
-    rewarded.onAdLoaded(id).then((value) {
-      _onAdLoaded(id, callback);
-
-      callback();
-    });
-  }
-
-  void _onAdFailedToLoad(String id, Function callback) {
-    rewarded.onAdFailedToLoad(id).then((value) {
-      _onAdFailedToLoad(id, callback);
-
-      callback(value);
-    });
-  }
-
-  void _onAdFailedToShow(String id, Function callback) {
-    rewarded.onAdFailedToShow(id).then((value) {
-      _onAdFailedToShow(id, callback);
-
-      callback(value);
-    });
-  }
-
-  void _onImpression(String id, Function callback) {
-    rewarded.onImpression(id).then((value) {
-      _onImpression(id, callback);
-
-      callback(value);
-    });
-  }
-
-  void _onAdClicked(String id, Function callback) {
-    rewarded.onAdClicked(id).then((value) {
-      _onAdClicked(id, callback);
-
-      callback();
-    });
-  }
-
-  void _onAdShown(String id, Function callback) {
-    rewarded.onAdShown(id).then((value) {
-      _onAdShown(id, callback);
-
-      callback();
-    });
-  }
-
-  void _onAdDismissed(String id, Function callback) {
-    rewarded.onAdDismissed(id).then((value) {
-      _onAdDismissed(id, callback);
-
-      callback();
-    });
-  }
-
-  void _onRewarded(String id, Function callback) {
-    rewarded.onRewarded(id).then((value) {
-      _onRewarded(id, callback);
-
-      callback(value);
-    });
   }
 
   final String id;
@@ -122,5 +41,71 @@ class YandexAdsRewardedComponent {
 
   void show() {
     rewarded.show(id);
+  }
+}
+
+class FlutterYandexAdsRewardedCallbacks implements FlutterYandexAdsRewarded {
+  @override
+  void onAdClicked(String id) {
+    final callbacks = FlutterYandexAds.getRewarded(id);
+    if (callbacks?.onAdClicked != null) {
+      callbacks?.onAdClicked!();
+    }
+  }
+
+  @override
+  void onAdDismissed(String id) {
+    final callbacks = FlutterYandexAds.getRewarded(id);
+    if (callbacks?.onAdDismissed != null) {
+      callbacks?.onAdDismissed!();
+    }
+  }
+
+  @override
+  void onAdFailedToLoad(String id, RewardedError err) {
+    final callbacks = FlutterYandexAds.getRewarded(id);
+    if (callbacks?.onAdFailedToLoad != null) {
+      callbacks?.onAdFailedToLoad!(err);
+    }
+  }
+
+  @override
+  void onAdFailedToShow(String id, RewardedError err) {
+    final callbacks = FlutterYandexAds.getRewarded(id);
+    if (callbacks?.onAdFailedToShow != null) {
+      callbacks?.onAdFailedToShow!(err);
+    }
+  }
+
+  @override
+  void onAdLoaded(String id) {
+    final callbacks = FlutterYandexAds.getRewarded(id);
+    if (callbacks?.onAdLoaded != null) {
+      callbacks?.onAdLoaded!();
+    }
+  }
+
+  @override
+  void onAdShown(String id) {
+    final callbacks = FlutterYandexAds.getRewarded(id);
+    if (callbacks?.onAdShown != null) {
+      callbacks?.onAdShown!();
+    }
+  }
+
+  @override
+  void onImpression(String id, RewardedImpression data) {
+    final callbacks = FlutterYandexAds.getRewarded(id);
+    if (callbacks?.onImpression != null) {
+      callbacks?.onImpression!(data);
+    }
+  }
+
+  @override
+  void onRewarded(String id, RewardedEvent reward) {
+    final callbacks = FlutterYandexAds.getRewarded(id);
+    if (callbacks?.onImpression != null) {
+      callbacks?.onReward!(reward);
+    }
   }
 }

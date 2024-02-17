@@ -49,13 +49,15 @@ extension YandexAdsInterstitialComponent: YMAInterstitialAdLoaderDelegate {
         let id = interstitialAd.adInfo?.adUnitId ?? ""
         interstitials[id]?.ad = interstitialAd
         interstitials[id]?.ad?.delegate = self
-        callbacks.onAdLoaded(id: id) {}
+        callbacks.onAdLoaded(id: id) {_ in }
     }
     
     func interstitialAdLoader(_ adLoader: YMAInterstitialAdLoader, didFailToLoadWithError error: YMAAdRequestError) {
-        callbacks.onAdFailedToLoad(id: error.adUnitId ?? "",
-                                   err: InterstitialError(code: 0, description: error.error.localizedDescription),
-                                   completion: {})
+        callbacks.onAdFailedToLoad(
+            id: error.adUnitId ?? "",
+            err: InterstitialError(code: 0, description: error.error.localizedDescription),
+            completion: {_ in }
+        )
     }
 }
 
@@ -63,28 +65,34 @@ extension YandexAdsInterstitialComponent: YMAInterstitialAdDelegate {
    
     func interstitialAd(_ interstitialAd: YMAInterstitialAd, didFailToShowWithError error: Error) {
         let id = interstitialAd.adInfo?.adUnitId ?? ""
-        callbacks.onAdFailedToShow(id: id,
-                                   err: InterstitialError(code: 0, description: error.localizedDescription),
-                                   completion: {})
+        callbacks.onAdFailedToShow(
+            id: id,
+            err: InterstitialError(code: 0, description: error.localizedDescription),
+            completion: {_ in }
+        )
     }
 
     func interstitialAdDidShow(_ interstitialAd: YMAInterstitialAd) {
         let id = interstitialAd.adInfo?.adUnitId ?? ""
-        callbacks.onAdShown(id: id) {}
+        callbacks.onAdShown(id: id) {_ in }
     }
 
     func interstitialAdDidDismiss(_ interstitialAd: YMAInterstitialAd) {
         let id = interstitialAd.adInfo?.adUnitId ?? ""
-        callbacks.onAdDismissed(id: id) {}
+        callbacks.onAdDismissed(id: id) {_ in }
     }
 
     func interstitialAdDidClick(_ interstitialAd: YMAInterstitialAd) {
         let id = interstitialAd.adInfo?.adUnitId ?? ""
-        callbacks.onAdClicked(id: id) {}
+        callbacks.onAdClicked(id: id) {_ in }
     }
 
     func interstitialAd(_ interstitialAd: YMAInterstitialAd, didTrackImpressionWith impressionData: YMAImpressionData?) {
         let id = interstitialAd.adInfo?.adUnitId ?? ""
-        callbacks.onImpression(id: id, data: InterstitialImpression(data: impressionData?.rawData ?? ""), completion: {})
+        callbacks.onImpression(
+            id: id,
+            data: InterstitialImpression(data: impressionData?.rawData ?? ""),
+            completion: {_ in }
+        )
     }
 }

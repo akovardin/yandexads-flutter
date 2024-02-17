@@ -1,6 +1,6 @@
 name: flutter_yandex_ads
 description: Yandex Ads support for flutter applications.
-version: 1.0.5+6
+version: 1.0.4
 homepage: https://gitflic.ru/project/kovardin/flutter-yandex-ads
 
 environment:
@@ -14,8 +14,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^1.0.0
-  pigeon: ^14.0.0
+  flutter_lints: ^2.0.0
+  pigeon: ^17.0.0
 
 flutter:
   plugin:

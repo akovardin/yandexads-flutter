@@ -103,7 +103,7 @@ class _BannerScreenState extends State<BannerScreen> {
     banner = YandexAdsBannerComponent(
       width: 320,
       height: 100,
-      id: 'R-M-DEMO-320x50',
+      id: 'demo-banner-yandex',
       onAdLoaded: () {
         print('banner onAdLoaded');
       },
@@ -155,7 +155,7 @@ class _NativeScreenState extends State<NativeScreen> {
         SizedBox(
           height: 300,
           child: YandexAdsNativeWidget(
-            id: 'R-M-DEMO-native-i',
+            id: 'demo-native-app-yandex',
             onAdLoaded: () {
               print('native onAdLoaded');
             },
@@ -190,7 +190,7 @@ class _InterstitialScreenState extends State<InterstitialScreen> {
     super.initState();
 
     interstitial = YandexAdsInterstitialComponent(
-      id: 'R-M-338238-18',
+      id: 'demo-interstitial-yandex',
       onAdLoaded: () {
         print('interstitial onAdLoaded');
       },
@@ -246,7 +246,7 @@ class _RewardedScreenState extends State<RewardedScreen> {
     super.initState();
 
     rewarded = YandexAdsRewardedComponent(
-        id: 'R-M-DEMO-rewarded-client-side-rtb',
+        id: 'demo-rewarded-yandex',
         onAdLoaded: () {
           print('rewarded onAdLoaded');
         },

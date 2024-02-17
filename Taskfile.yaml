@@ -28,17 +28,17 @@ tasks:
 
   interstitial:
     cmds:
-      - flutter pub run pigeon
+      - dart run pigeon
         --input pigeons/interstitial.dart
 
   rewarded:
     cmds:
-      - flutter pub run pigeon
+      - dart run pigeon
         --input pigeons/rewarded.dart
 
   appopen:
     cmds:
-      - flutter pub run pigeon
+      - dart run pigeon
         --input pigeons/appopen.dart
 
   pigeons:

@@ -1,10 +1,9 @@
-## 1.0.5
-
-* Updated android YandexAds to 6.0.1
-
 ## 1.0.4
 
-* Reformat banner logic
+* Rebuild banner logic
+* Rebuild interstitial and rewarded
+* Using pigeon host api
+* Updated android YandexAds to 6.0.1
 
 ## 1.0.3
 

@@ -15,16 +15,17 @@ class YandexAdsInterstitialComponent {
     interstitial = YandexAdsInterstitial();
 
     FlutterYandexAds.addInterstitial(
-        id,
-        YandexAdsInterstitialCallbacks(
-          onAdLoaded: onAdLoaded,
-          onAdFailedToLoad: onAdFailedToLoad,
-          onAdFailedToShow: onAdFailedToShow,
-          onImpression: onImpression,
-          onAdClicked: onAdClicked,
-          onAdShown: onAdShown,
-          onAdDismissed: onAdDismissed,
-        ));
+      id,
+      YandexAdsInterstitialCallbacks(
+        onAdLoaded: onAdLoaded,
+        onAdFailedToLoad: onAdFailedToLoad,
+        onAdFailedToShow: onAdFailedToShow,
+        onImpression: onImpression,
+        onAdClicked: onAdClicked,
+        onAdShown: onAdShown,
+        onAdDismissed: onAdDismissed,
+      ),
+    );
 
     interstitial.make(id);
   }
@@ -44,7 +45,7 @@ class YandexAdsInterstitialComponent {
 class FlutterYandexAdsInterstitialCallbacks implements FlutterYandexAdsInterstitial {
   @override
   void onAdClicked(String id) {
-    final callbacks = FlutterYandexAds.getAppOpen(id);
+    final callbacks = FlutterYandexAds.getInterstitial(id);
     if (callbacks?.onAdClicked != null) {
       callbacks?.onAdClicked!();
     }
@@ -52,7 +53,7 @@ class FlutterYandexAdsInterstitialCallbacks implements FlutterYandexAdsInterstit
 
   @override
   void onAdDismissed(String id) {
-    final callbacks = FlutterYandexAds.getAppOpen(id);
+    final callbacks = FlutterYandexAds.getInterstitial(id);
     if (callbacks?.onAdDismissed != null) {
       callbacks?.onAdDismissed!();
     }
@@ -60,7 +61,7 @@ class FlutterYandexAdsInterstitialCallbacks implements FlutterYandexAdsInterstit
 
   @override
   void onAdFailedToLoad(String id, InterstitialError err) {
-    final callbacks = FlutterYandexAds.getAppOpen(id);
+    final callbacks = FlutterYandexAds.getInterstitial(id);
     if (callbacks?.onAdFailedToLoad != null) {
       callbacks?.onAdFailedToLoad!(err);
     }
@@ -68,7 +69,7 @@ class FlutterYandexAdsInterstitialCallbacks implements FlutterYandexAdsInterstit
 
   @override
   void onAdFailedToShow(String id, InterstitialError err) {
-    final callbacks = FlutterYandexAds.getAppOpen(id);
+    final callbacks = FlutterYandexAds.getInterstitial(id);
     if (callbacks?.onAdFailedToShow != null) {
       callbacks?.onAdFailedToShow!(err);
     }
@@ -76,7 +77,7 @@ class FlutterYandexAdsInterstitialCallbacks implements FlutterYandexAdsInterstit
 
   @override
   void onAdLoaded(String id) {
-    final callbacks = FlutterYandexAds.getAppOpen(id);
+    final callbacks = FlutterYandexAds.getInterstitial(id);
     if (callbacks?.onAdLoaded != null) {
       callbacks?.onAdLoaded!();
     }
@@ -84,7 +85,7 @@ class FlutterYandexAdsInterstitialCallbacks implements FlutterYandexAdsInterstit
 
   @override
   void onAdShown(String id) {
-    final callbacks = FlutterYandexAds.getAppOpen(id);
+    final callbacks = FlutterYandexAds.getInterstitial(id);
     if (callbacks?.onAdShown != null) {
       callbacks?.onAdShown!();
     }
@@ -92,9 +93,9 @@ class FlutterYandexAdsInterstitialCallbacks implements FlutterYandexAdsInterstit
 
   @override
   void onImpression(String id, InterstitialImpression data) {
-    final callbacks = FlutterYandexAds.getAppOpen(id);
+    final callbacks = FlutterYandexAds.getInterstitial(id);
     if (callbacks?.onImpression != null) {
-      callbacks?.onImpression!();
+      callbacks?.onImpression!(data);
     }
   }
 }

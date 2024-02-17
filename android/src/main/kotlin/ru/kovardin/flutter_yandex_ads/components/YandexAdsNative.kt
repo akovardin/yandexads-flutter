@@ -3,24 +3,28 @@ package ru.kovardin.flutter_yandex_ads.components
 import android.content.Context
 import com.yandex.mobile.ads.common.AdRequestError
 import com.yandex.mobile.ads.common.ImpressionData
-import com.yandex.mobile.ads.nativeads.*
+import com.yandex.mobile.ads.nativeads.NativeAd
+import com.yandex.mobile.ads.nativeads.NativeAdEventListener
+import com.yandex.mobile.ads.nativeads.NativeAdLoadListener
+import com.yandex.mobile.ads.nativeads.NativeAdLoader
+import com.yandex.mobile.ads.nativeads.NativeAdRequestConfiguration
 import com.yandex.mobile.ads.nativeads.template.NativeBannerView
-import ru.kovardin.flutter_yandex_ads.pigeons.Native
+import ru.kovardin.flutter_yandex_ads.pigeons.native.NativeError
+import ru.kovardin.flutter_yandex_ads.pigeons.native.NativeImpression
+import ru.kovardin.flutter_yandex_ads.pigeons.native.YandexAdsNative as Native
 
 data class NativeData(
     var view: NativeBannerView? = null,
     var params: MutableMap<String, String>? = null,
-    var onAdLoaded: Native.Result<Void>? = null,
-    var onAdFailedToLoad: Native.Result<Native.NativeError>? = null,
-    var onAdShown: Native.Result<Void>? = null,
-    var onAdDismissed: Native.Result<Void>? = null,
-    var onAdClicked: Native.Result<Void>? = null,
-    var onLeftApplication: Native.Result<Void>? = null,
-    var onReturnedToApplication: Native.Result<Void>? = null,
-    var onImpression: Native.Result<Native.NativeImpression>? = null,
+    var onAdLoaded: ((Result<Unit>) -> Unit)? = null,
+    var onAdFailedToLoad: ((Result<NativeError>) -> Unit)? = null,
+    var onAdClicked: ((Result<Unit>) -> Unit)? = null,
+    var onLeftApplication: ((Result<Unit>) -> Unit)? = null,
+    var onReturnedToApplication: ((Result<Unit>) -> Unit)? = null,
+    var onImpression: ((Result<NativeImpression>) -> Unit)? = null,
 )
 
-class YandexAdsNative(private val context: Context) : Native.YandexAdsNative {
+class YandexAdsNative(private val context: Context) : Native {
     var banners: MutableMap<String, NativeData> = mutableMapOf()
 
     override fun make(id: String) {
@@ -36,36 +40,38 @@ class YandexAdsNative(private val context: Context) : Native.YandexAdsNative {
             override fun onAdLoaded(nativeAd: NativeAd) {
                 nativeAd.setNativeAdEventListener(object : NativeAdEventListener {
                     override fun onAdClicked() {
-                        banners[id]?.onAdClicked?.success(null)
+                        banners[id]?.onAdClicked?.let { it(Result.success(Unit)) }
                     }
 
                     override fun onLeftApplication() {
-                        banners[id]?.onLeftApplication?.success(null)
+                        banners[id]?.onLeftApplication?.let { it(Result.success(Unit)) }
                     }
 
                     override fun onReturnedToApplication() {
-                        banners[id]?.onReturnedToApplication?.success(null)
+                        banners[id]?.onReturnedToApplication?.let { it(Result.success(Unit)) }
                     }
 
                     override fun onImpression(data: ImpressionData?) {
-                        val builder = Native.NativeImpression.Builder()
-                        builder.setData(data?.rawData ?: "")
-                        banners[id]?.onImpression?.success(builder.build())
+                        val imp = NativeImpression(
+                            data = data?.rawData.orEmpty(),
+                        )
+                        banners[id]?.onImpression?.let { it(Result.success(imp)) }
                     }
                 })
 
                 banners[id]?.view = NativeBannerView(context)
                 banners[id]?.view?.setAd(nativeAd)
 
-                banners[id]?.onAdLoaded?.success(null)
+                banners[id]?.onAdLoaded?.let { it(Result.success(Unit)) }
             }
 
             override fun onAdFailedToLoad(error: AdRequestError) {
-                val builder = Native.NativeError.Builder()
-                builder.setCode(error.code.toLong())
-                builder.setDescription(error.description)
+                val err = NativeError(
+                    code = error.code.toLong(),
+                    description = error.description,
+                )
 
-                banners[id]?.onAdFailedToLoad?.success(builder.build())
+                banners[id]?.onAdFailedToLoad?.let { it(Result.success(err)) }
             }
         })
 
@@ -82,27 +88,27 @@ class YandexAdsNative(private val context: Context) : Native.YandexAdsNative {
         loader.loadAd(config.build())
     }
 
-    override fun onAdLoaded(id: String, result: Native.Result<Void>) {
-        banners[id]?.onAdLoaded = result
+    override fun onAdLoaded(id: String, callback: (Result<Unit>) -> Unit) {
+        banners[id]?.onAdLoaded = callback
     }
 
-    override fun onAdFailedToLoad(id: String, result: Native.Result<Native.NativeError>) {
-        banners[id]?.onAdFailedToLoad = result
+    override fun onAdFailedToLoad(id: String, callback: (Result<NativeError>) -> Unit) {
+        banners[id]?.onAdFailedToLoad = callback
     }
 
-    override fun onAdClicked(id: String, result: Native.Result<Void>) {
-        banners[id]?.onAdClicked = result
+    override fun onAdClicked(id: String, callback: (Result<Unit>) -> Unit) {
+        banners[id]?.onAdClicked = callback
     }
 
-    override fun onLeftApplication(id: String, result: Native.Result<Void>) {
-        banners[id]?.onLeftApplication = result
+    override fun onLeftApplication(id: String, callback: (Result<Unit>) -> Unit) {
+        banners[id]?.onLeftApplication = callback
     }
 
-    override fun onReturnedToApplication(id: String, result: Native.Result<Void>) {
-        banners[id]?.onReturnedToApplication = result
+    override fun onReturnedToApplication(id: String, callback: (Result<Unit>) -> Unit) {
+        banners[id]?.onReturnedToApplication = callback
     }
 
-    override fun onImpression(id: String, result: Native.Result<Native.NativeImpression>) {
-        banners[id]?.onImpression = result
+    override fun onImpression(id: String, callback: (Result<NativeImpression>) -> Unit) {
+        banners[id]?.onImpression = callback
     }
 }

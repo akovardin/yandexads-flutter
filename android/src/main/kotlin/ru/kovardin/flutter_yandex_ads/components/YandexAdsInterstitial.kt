@@ -11,16 +11,17 @@ import com.yandex.mobile.ads.interstitial.InterstitialAdEventListener
 import com.yandex.mobile.ads.interstitial.InterstitialAdLoadListener
 import com.yandex.mobile.ads.interstitial.InterstitialAdLoader
 import io.flutter.embedding.engine.plugins.FlutterPlugin
-import ru.kovardin.flutter_yandex_ads.pigeons.Interstitial
-import ru.kovardin.flutter_yandex_ads.pigeons.Interstitial.InterstitialError
-import ru.kovardin.flutter_yandex_ads.pigeons.Interstitial.InterstitialImpression
+import ru.kovardin.flutter_yandex_ads.pigeons.interstitial.FlutterYandexAdsInterstitial
+import ru.kovardin.flutter_yandex_ads.pigeons.interstitial.YandexAdsInterstitial as Interstitial
+import ru.kovardin.flutter_yandex_ads.pigeons.interstitial.InterstitialError
+import ru.kovardin.flutter_yandex_ads.pigeons.interstitial.InterstitialImpression
 
 data class InterstitialData(
     var interstitial: InterstitialAd? = null,
     var loader: InterstitialAdLoader? = null,
 )
 
-class YandexAdsInterstitial(private val context: Context, private val activity: Activity, private val callbacks: YandexAdsInterstitialCallbacks) : Interstitial.YandexAdsInterstitial {
+class YandexAdsInterstitial(private val context: Context, private val activity: Activity, private val callbacks: YandexAdsInterstitialCallbacks) : Interstitial {
     private var interstitials: MutableMap<String, InterstitialData> = mutableMapOf()
 
     override fun make(id: String) {
@@ -41,11 +42,12 @@ class YandexAdsInterstitial(private val context: Context, private val activity: 
                         }
 
                         override fun onAdFailedToShow(error: AdError) {
-                            val err = InterstitialError.Builder()
-                            err.setCode(0)
-                            err.setDescription(error.description)
+                            val err = InterstitialError(
+                                code = 0,
+                                description = error.description,
+                            )
 
-                            callbacks.onAdFailedToShow(id, err.build())
+                            callbacks.onAdFailedToShow(id, err)
                         }
 
                         override fun onAdDismissed() {
@@ -57,20 +59,20 @@ class YandexAdsInterstitial(private val context: Context, private val activity: 
                         }
 
                         override fun onAdImpression(data: ImpressionData?) {
-                            val builder = InterstitialImpression.Builder()
-                            builder.setData(data?.rawData ?: "")
+                            val imp = InterstitialImpression(data = data?.rawData ?: "")
 
-                            callbacks.onImpression(id, builder.build())
+                            callbacks.onImpression(id, imp)
                         }
                     })
                 }
 
                 override fun onAdFailedToLoad(error: AdRequestError) {
-                    val err = InterstitialError.Builder()
-                    err.setCode(error.code.toLong())
-                    err.setDescription(error.description)
+                    val err = InterstitialError(
+                        code = 0,
+                        description = error.description,
+                    )
 
-                    callbacks.onAdFailedToLoad(id, err.build())
+                    callbacks.onAdFailedToLoad(id, err)
                 }
             })
         }
@@ -91,13 +93,12 @@ class YandexAdsInterstitial(private val context: Context, private val activity: 
     }
 }
 
-
 class YandexAdsInterstitialCallbacks(binding: FlutterPlugin.FlutterPluginBinding) {
 
-    var api: Interstitial.FlutterYandexAdsInterstitial? = null
+    var api: FlutterYandexAdsInterstitial? = null
 
     init {
-        api = Interstitial.FlutterYandexAdsInterstitial(binding.getBinaryMessenger())
+        api = FlutterYandexAdsInterstitial(binding.getBinaryMessenger())
     }
 
     fun onAdLoaded(id: String) {
