@@ -48,8 +48,7 @@ class FlutterYandexAdsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         // api set
         val api = YandexApi(context)
         YandexAdsApi.setUp(messenger, api)
-
-
+        
         val banner = YandexAdsBanner(context)
         val native = YandexAdsNative(context)
 

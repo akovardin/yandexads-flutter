@@ -95,37 +95,33 @@ class YandexAdsInterstitial(private val context: Context, private val activity: 
 
 class YandexAdsInterstitialCallbacks(binding: FlutterPlugin.FlutterPluginBinding) {
 
-    var api: FlutterYandexAdsInterstitial? = null
-
-    init {
-        api = FlutterYandexAdsInterstitial(binding.getBinaryMessenger())
-    }
+    var api: FlutterYandexAdsInterstitial = FlutterYandexAdsInterstitial(binding.binaryMessenger)
 
     fun onAdLoaded(id: String) {
-        api?.onAdLoaded(id) {}
+        api.onAdLoaded(id) {}
     }
 
     fun onAdFailedToLoad(id: String,  error: InterstitialError) {
-        api?.onAdFailedToLoad(id, error) {}
+        api.onAdFailedToLoad(id, error) {}
     }
 
     fun onAdFailedToShow(id: String, error: InterstitialError) {
-        api?.onAdFailedToLoad(id, error) {}
+        api.onAdFailedToLoad(id, error) {}
     }
 
     fun onAdShown(id: String) {
-        api?.onAdShown(id) {}
+        api.onAdShown(id) {}
     }
 
     fun onAdDismissed(id: String) {
-        api?.onAdDismissed(id) {}
+        api.onAdDismissed(id) {}
     }
 
     fun onAdClicked(id: String) {
-        api?.onAdClicked(id) {}
+        api.onAdClicked(id) {}
     }
 
     fun onImpression(id: String, data: InterstitialImpression) {
-        api?.onImpression(id, data) {}
+        api.onImpression(id, data) {}
     }
 }
