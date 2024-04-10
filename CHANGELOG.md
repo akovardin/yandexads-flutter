@@ -1,3 +1,7 @@
+## 1.0.5
+
+* Fixed readme
+
 ## 1.0.4
 
 * Rebuild banner logic
